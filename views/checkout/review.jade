@@ -3,7 +3,7 @@ extends ../layout
 block content
     section#cart_items
         .container
-            h2 Resumen de Orden
+            h2 Finalizar compra
             .row
                 .col-sm-8
                     
@@ -21,7 +21,7 @@ block content
                                         -var quantity = item.quantity;
                                         if quantity > 0
                                             -var name = item.ProductName;
-                                            -var productLink = '/cat/' + item.CategorySlug + '/' + item.ProductSlug;
+                                            -var productLink = '/cat/' + item.CategorySlug + '/' + item.ProductSlug + '/' + item.ProductID;
                                             -var unitPrice = item.ProductPrice;
                                             -var productTotal = item.productTotal;
                                             tr

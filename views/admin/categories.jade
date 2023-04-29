@@ -10,15 +10,15 @@ block details
             if categories
                 each category in categories
                     .row
-                        .col-sm-3
+                        .col-sm-4
                             .product-image-wrapper
                                 .single-products
-                                    .productinfo.text-center
+                                    .productCat.text-center
                                         img(src=category.Image, alt=category.CategoryName)
-                        .col-sm-6
+                        .col-sm-4 
                                 h2.cat=category.CategoryName
                                 p=category.Description
-                        .col-sm-3
+                        .col-sm-4
                                 form.dev-form(action='/admin/cat/' + category.CategoryID + '/edit', method='GET')
                                     button.btn.btn-default(type='submit', class="btn btn-info")
                                         i.fa.fa-edit

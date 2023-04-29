@@ -4,8 +4,11 @@ block content
 
 
     h2.title.text-center
-                    | Carrito de compras
+        i.fa.fa-shopping-cart
+        |     Carrito de compras
 
+
+    
     table.content-table
       thead
         tr
@@ -27,7 +30,7 @@ block content
                 each item in cart
                     -var quantity = item.quantity;
                     -var name = item.ProductName;
-                    -var productLink = '/cat/' + item.CategorySlug + '/' + item.ProductSlug;
+                    -var productLink = '/cat/' + item.CategorySlug + '/' + item.ProductSlug + '/' + item.ProductID;
                     -var unitPrice = item.ProductPrice;
                     -var productTotal = item.productTotal;
                     -var id = item.ProductID;
@@ -44,7 +47,8 @@ block content
                         td.cart_quantity
                             .cart_quantity_button
                                 form(action='/cart/' + id + '/update', method='POST')
-                                    input.cart_quantity_input(type='number', name=id, value=quantity, autocomplete='off', size='2')
+                                    //- onchange="this.form.submit()",
+                                    input.cart_quantity_input(type='number', name=id, value=quantity, autocomplete='off', size='2', min="1", max=item.UnitsInStock)
                         td(style='color: green;').cart_total
                             p.cart_total_price= ' $' + productTotal
                         td.cart_delete
@@ -76,12 +80,6 @@ block content
                                         tr
                                             td Descuento
                                             td= ' $' + summary.discount
-                                        tr.shipping-cost
-                                            td Costo de Envio
-                                            if summary.shipCost == 0
-                                                td Gratis
-                                            else
-                                                td= ' $' + summary.shipCost
                                         tr
                                             td Total
                                             td

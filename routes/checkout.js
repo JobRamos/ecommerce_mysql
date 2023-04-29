@@ -70,14 +70,22 @@ router.route('/review')
     .get(function (req, res, next) {
         //show current cart
         //Order
-        var contextDict = {
-            title: 'Checkout - Review Order',
-            cart: req.session.showCart,
-            summary: req.session.cartSummary,
-            address: req.session.address,
-            customer: req.user
-        };
-        res.render('checkout/review', contextDict);
+
+        if (req.isAuthenticated()) {
+            var contextDict = {
+                title: 'Checkout - Finalizar compra',
+                cart: req.session.showCart,
+                summary: req.session.cartSummary,
+                address: req.session.address,
+                customer: req.user
+            };
+            res.render('checkout/review', contextDict);
+            
+        } else {
+            req.session.inCheckOut = true;
+            res.redirect('/sign-in');
+        }   
+
     });
 
 router.route('/order')

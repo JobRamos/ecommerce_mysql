@@ -15,7 +15,7 @@ block content
                             .info
                                 img.iocus-banner(src='/img/iocus-1.png', alt='Iocus Logo')
                                 p
-                                | Bienvenido a Iocus, el mejor sitio web para la compra de videojuegos digitales
+                                //- | Bienvenido a Iocus, el mejor sitio web para la compra de videojuegos digitales
           
                                        
                         br
@@ -24,21 +24,23 @@ block content
                         h2.title.text-center Videojuegos
                         if featProducts
                             each product in featProducts
-                                - var productUrl = '/cat/' + product.CategorySlug + '/' + product.ProductSlug;
+                                - var productUrl = '/cat/' + product.CategorySlug + '/' + product.ProductSlug + '/' + product.ProductID;
                                 .col-sm-3
                                     .product-image-wrapper
                                         .single-products
                                             .productinfo.text-center
                                                 .productimg
                                                     a(href=productUrl)
-                                                        img(src=product.Image, alt=product.ProductName)
-                                                p
-                                                    a(href=productUrl)=product.ProductName
-                                                h2= ' $' + product.ProductPrice
+                                                        figure
+                                                            img(src=product.Image, alt=product.ProductName)
+                                                            figcaption= product.ProductName
+                                                    p
+                                                        a(href=productUrl)=product.ProductName
+                                                    h2= ' MX$' + product.ProductPrice
                     ///features_items
             .row
                 .features_items
-                    h2.title.text-center Categorias
+                    h2.title.text-center Plataformas
                     if categories
                         each category in categories
                             .col-sm-3
@@ -48,4 +50,3 @@ block content
                                             .categoryinfo.text-center
                                                 .categoryimg
                                                     img(src=category.Image, alt=category.CategoryName)
-                                                    h4=category.CategoryName

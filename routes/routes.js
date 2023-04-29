@@ -37,8 +37,6 @@ router.all('/', function (req, res, next) {
 
 
 
-
-
 /* Route Category page. */
 router.route('/cat/')
     .all(function (req, res, next) {
@@ -78,6 +76,7 @@ router.route('/cat/:catSlug')
                 RunQuery(selectQuery, function (categories) {
 
                     var contextDict = {
+                        currentUrl: '/cat/all',
                         title: 'Todos los Productos',
                         products: products,
                         categories: categories,
@@ -141,32 +140,40 @@ router.route('/cat/:catSlug')
     });
 
 /* Route Product page. */
-router.route('/cat/:catSlug/:prodSlug')
+router.route('/cat/:catSlug/:prodSlug/:prodID')
     .all(function (req, res, next) {
-        var sqlStr = '\
-        SELECT *\
-        FROM Products\
-        WHERE ProductSlug = \'' + req.params.prodSlug + '\'';
 
-        RunQuery(sqlStr, function (product) {
+        var user = 9999;
 
-            var contextDict = {
-                title: product[0].ProductName,
-                product: product[0],
-                customer: req.user
-            };
+        if (req.isAuthenticated()) {
+            user = req.user.UserID;
+        }
 
-            res.render('productDetail', contextDict);
-        });
+        var sqlStr1 = 'SELECT COUNT(*) as WhislistCount FROM astore.wishlist\
+            WHERE IDUsuario = \'' + user + '\' AND IDvideojuego = \'' + req.params.prodID + '\'';
+
+        RunQuery(sqlStr1, function (WhislistCount) {
+
+            var sqlStr2 = '\
+            SELECT Products.*, Categories.CategoryName, Categories.CategorySlug\
+                FROM Products\
+                INNER JOIN Categories\
+                ON Products.CategoryID = Categories.CategoryID\
+            WHERE ProductSlug = \'' + req.params.prodSlug + '\'';
+
+            RunQuery(sqlStr2, function (product) {
+
+                var contextDict = {
+                    title: product[0].ProductName,
+                    product: product[0],
+                    WhislistCount: WhislistCount[0],
+                    customer: req.user
+                };
+
+                res.render('productDetail', contextDict);
+            }); 
+        });      
     });
-
-router.route('/xd')
-    .all(function (req, res, next) {
-        
-            res.render('xd.html', contextDict);
-       
-    });
-
     
 router.route('/subscribe')
     .post(function (req, res, next) {
@@ -178,26 +185,5 @@ router.route('/subscribe')
             res.redirect('/');
         });
     });
-
-/* Route Login page.
- router.route('/login/')
- .get (function (req, res, next) {
- var contextDict = {
- title: 'Login'
- };
- res.render('login', contextDict);
- });
-
- .post(function (req, res, next) {
- //read inputs
- //validate inputs
- //redirect to account info page
- var contextDict = {
- title: '',
- signInError: req.flash('loginError')
- };
- res.render('template', contextDict);
- });
- */
 
 module.exports = router;

@@ -1,30 +1,33 @@
 extends layout
 
 block content
+
+    
     section
+        .container 
+            button.botonRegresar(onclick="window.history.back();")
+                i.fa.fa-arrow-left
         .container
             .row
-                //.col-sm-3
-                //    .left-sidebar
-                //        h2 Categories
-                //        //category-products
-                //        #accordian.panel-group.category-products
-                //            if categories
-                //                each category in categories
-                //                    .panel.panel-default
-                //                        .panel-heading
-                //                            h4.panel-title
-                //                                a(href=category.SlugLink)= category.CategoryName
-                //        ///category-products
-
-                //.col-sm-9.padding-right
+                
+                
                 if product
                     // product-details
                     .product-details
+                        
                         //product-image
                         .col-sm-5
                             .view-product
                                 img(src=product.Image, alt=product.ProductName)
+                                if (WhislistCount.WhislistCount < 1)
+                                    form(action='/wishlist/' + product.ProductID + '/add', method='POST')
+                                        button.botonWishlist
+                                            i.fa.fa-heart
+                                else 
+                                    form(action='/wishlist/' + product.ProductID + '/delete', method='POST')
+                                        button.botonWishlist(type='submit', style="background-color: #FF6A74;")
+                                            i.fa.fa-heart
+                                
                         ///product-image
 
                         //product-information
@@ -47,6 +50,10 @@ block content
                                 p
                                     b Descripción:
                                     = ' ' + product.Description
+                                br
+                                p
+                                    b Plataforma:
+                                    = ' ' + product.CategoryName
 
                                 p
                                     b Disponibilidad:
@@ -56,23 +63,26 @@ block content
                                     = ' ' + product.ManufactureYear
 
                                 span
-                                    span= ' $' + product.ProductPrice
+                                    span= ' MX$' + product.ProductPrice
                                     form(action='/cart/' + product.ProductID + '/add', method='POST')
                                         label Cantidad:
-                                            input(type='number', name='quantity', value='1')
+                                            input(type='number', name='quantity',id="xd3", onchange="myFunction(this.value)",  value='1', min="1", max=product.UnitsInStock)
                                         br
                                         button.btn.btn-default.add-to-cart(type='submit')
                                             i.fa.fa-shopping-cart
-                                            |          Añadir al Carrito
+                                            |          Añadir al carrito
+                                    form(action='/cart/' + product.ProductID + '/buy-directly', method='POST')
+                                        input(type='number', name='quantity',id="xd4", value='1', min="1", max=product.UnitsInStock, style="display: none;")
+                                        button.btn.btn-default.add-to-wishlist(type='submit', style="width: 150px;")
+                                            i.fa.fa-arrow-right
+                                            |          Comprar ahora    
 
-                                form(action='/wishlist/' + product.ProductID + '/add', method='POST')
-                                        button.btn.btn-default.add-to-wishlist(type='submit')
-                                            i.fa.fa-heart
-                                            |          Añadir a la Lista de Deseos
+                                br
                                 
                                 
+    script(type='text/javascript').
+        function myFunction(val) {
+            //- alert("The input value has changed. The new value is: " + val);
+            document.getElementById("xd4").value = val;
+        }
 
-                                a(href='')
-                                    img.share.img-responsive(src='images/product-details/share.png', alt='')
-                        ///product-information
-                    ///product-details

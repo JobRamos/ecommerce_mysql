@@ -1,7 +1,8 @@
 // database module
 var mysql = require('mysql');
 var config = {
-    host: '110.238.80.161',
+    host: 'localhost',
+    // host: '110.238.80.161',
     user: 'root',
     password: 'Harveylinux77+',
     database: 'astore'
@@ -9,6 +10,8 @@ var config = {
 
 // init database
 var pool = mysql.createPool(config);
+
+
 
 //Fetch data
 function RunQuery(sql, callback) {

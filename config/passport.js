@@ -10,6 +10,9 @@ var bcrypt = require('bcrypt-nodejs');
 var database = require('../config/database');
 var RunQuery = database.RunQuery;
 
+// email module
+var nodemailer = require('nodemailer');
+
 // expose this function to our app using module.exports
 module.exports = function (passport) {
 
@@ -108,7 +111,32 @@ module.exports = function (passport) {
                                     \'' + passwordHash + '\', 0)';
 
                                 RunQuery(insertQuery, function (insertResult) {
-                                    //user
+                                    
+                                    //send mail process
+                                    var transporter = nodemailer.createTransport({
+                                    service: 'hotmail',
+                                    auth: {
+                                        user: 'jobdavid10@hotmail.com',
+                                        pass: 'Magenta77'
+                                    }
+                                    });
+
+                                    var mailOptions = {
+                                    from: 'jobdavid10@hotmail.com',
+                                    to: email,
+                                    subject: 'Iocus',
+                                    text: 'Hola '+ fullName+', gracias por registrate en Iocus'
+                                    };
+
+                                    transporter.sendMail(mailOptions, function(error, info){
+                                    if (error) {
+                                        console.log(error);
+                                    } else {
+                                        console.log('Email sent: ' + info.response);
+                                    }
+                                    });
+                                    
+                                    // finsih singup
                                     var user = {
                                         UserID: insertResult.insertId
                                     };

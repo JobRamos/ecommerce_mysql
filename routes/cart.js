@@ -32,6 +32,7 @@ router.route('/')
                     ProductID: aItem.ProductID,
                     ProductName: aItem.ProductName,
                     Description: aItem.Description,
+                    UnitsInStock: aItem.UnitsInStock,
                     ProductPrice: aItem.ProductPrice,
                     quantity: aItem.quantity,
                     productTotal: aItem.productTotal.toFixed(2)
@@ -157,6 +158,128 @@ router.route('/:id/add')
             res.redirect('/cart');
         });
         
+    });
+
+
+router.route('/buy-directly')
+    .all(function (req, res, next) {
+        var summary = req.session.summary;
+        var cartSummary;
+
+        if (summary)
+            cartSummary = {
+                subTotal: summary.subTotal.toFixed(2),
+                discount: summary.discount.toFixed(2),
+                shipCost: summary.shipCost.toFixed(2),
+                total: summary.total.toFixed(2)
+            };
+
+        var cart = req.session.cart;
+        var showCart = [];
+
+        for (var item in cart) {
+            var aItem = cart[item];
+            if (cart[item].quantity > 0) {
+                showCart.push({
+                    Image: aItem.Image,
+                    ProductSlug: aItem.ProductSlug,
+                    CategorySlug: aItem.CategorySlug,
+                    ProductID: aItem.ProductID,
+                    ProductName: aItem.ProductName,
+                    Description: aItem.Description,
+                    UnitsInStock: aItem.UnitsInStock,
+                    ProductPrice: aItem.ProductPrice,
+                    quantity: aItem.quantity,
+                    productTotal: aItem.productTotal.toFixed(2)
+                });
+            }
+        }
+
+        req.session.showCart = showCart;
+        req.session.cartSummary = cartSummary;
+
+        var contextDict = {
+            title: 'Checkout - Finalizar compra',
+            customer: req.user,
+            cart: showCart,
+            summary: cartSummary
+        };
+        res.render('checkout/review', contextDict);
+    });
+
+router.route('/:id/buy-directly')
+    .post(function (req, res, next) {
+
+        if (req.isAuthenticated()) {
+           
+            req.session.cart = {};
+            var cart = req.session.cart;
+
+            req.session.summary = {
+                    totalQuantity: 0,
+                    subTotal: 0.00,
+                    discount: 0.00,
+                    shipCost: 0.00,
+                    total: 0.00
+                };
+            var summary = req.session.summary;
+
+            var selectQuery = '\
+                SELECT Products.*, Categories.CategorySlug\
+                FROM Products\
+                INNER JOIN Categories\
+                ON Products.CategoryID = Categories.CategoryID\
+                WHERE ProductID = ' + req.params.id;
+
+            RunQuery(selectQuery, function (rows) {
+                var plusPrice = 0.00;
+                var inputQuantity = parseInt(req.body.quantity);
+
+                if (cart[req.params.id]) {
+                    if (inputQuantity) {
+                        cart[req.params.id].quantity += inputQuantity;
+                        plusPrice = cart[req.params.id].ProductPrice * inputQuantity;
+                        cart[req.params.id].productTotal += plusPrice;
+                        summary.subTotal += plusPrice;
+                        summary.totalQuantity += inputQuantity;
+                    }
+                    else {
+                        cart[req.params.id].quantity++;
+                        plusPrice = cart[req.params.id].ProductPrice;
+                        cart[req.params.id].productTotal += plusPrice;
+                        summary.subTotal += plusPrice;
+                        summary.totalQuantity++;
+                    }
+                }
+                else {
+                    cart[req.params.id] = rows[0];
+
+                    if (req.body.quantity) {
+                        cart[req.params.id].quantity = inputQuantity;
+                        plusPrice = cart[req.params.id].ProductPrice * inputQuantity;
+                        cart[req.params.id].productTotal = plusPrice;
+                        summary.subTotal += plusPrice;
+                        summary.totalQuantity += inputQuantity;
+                    }
+                    else {
+                        rows[0].quantity = 1;
+                        plusPrice = cart[req.params.id].ProductPrice;
+                        cart[req.params.id].productTotal = plusPrice;
+                        summary.subTotal += plusPrice;
+                        summary.totalQuantity++;
+                    }
+                }
+
+                summary.total = summary.subTotal - summary.discount + summary.shipCost;
+
+                res.redirect('/cart/buy-directly');
+            });
+            
+            
+        } else {
+            req.session.inCheckOut = true;
+            res.redirect('/sign-in');
+        }         
     });
 
 

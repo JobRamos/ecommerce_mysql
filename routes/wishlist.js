@@ -8,95 +8,69 @@ var RunQuery = database.RunQuery;
 router.route('/')
     .all(function (req, res, next) {
 
-        var wishlist = req.session.wishlist;
-        var showwishlist = [];
+        if (req.isAuthenticated()) {
+            var sqlStr = '\
+            SELECT *\
+            FROM wishlist\
+            INNER JOIN products\
+            ON wishlist.IDvideojuego = products.ProductID\
+            WHERE IDUsuario =  \'' + req.user.UserID + '\'';
 
-        for (var item in wishlist) {
-            var aItem = wishlist[item];
-            if (wishlist[item].quantity > 0) {
-                showwishlist.push({
-                    Image: aItem.Image,
-                    ProductSlug: aItem.ProductSlug,
-                    CategorySlug: aItem.CategorySlug,
-                    ProductID: aItem.ProductID,
-                    ProductName: aItem.ProductName,
-                    Description: aItem.Description,
-                    ProductPrice: aItem.ProductPrice,
-                    quantity: aItem.quantity,
-                    productTotal: aItem.productTotal.toFixed(2)
-                });
-            }
-        }
-
-        req.session.showwishlist = showwishlist;
-
-        var contextDict = {
-            title: 'wishlist',
-            customer: req.user,
-            wishlist: showwishlist
-        };
-        res.render('wishlist', contextDict);
+            RunQuery(sqlStr, function (wishlist) {
+                            
+                var contextDict = {
+                    title: 'Lista de deseos',
+                    customer: req.user,
+                    wishlist: wishlist
+                };
+                res.render('wishlist', contextDict);
+            });
+            
+        } else {
+            req.session.inCheckOut = true;
+            res.redirect('/sign-in');
+        }     
     });
 
 
 
 router.route('/:id/delete')
     .post(function (req, res, next) {
-        var wishlist = req.session.wishlist;
+        if (req.isAuthenticated()) {
+            var sqlStr = 'DELETE FROM wishlist\
+            WHERE IDUsuario =  \'' + req.user.UserID + '\' AND IDvideojuego =  \'' + req.params.id + '\'';
 
-        wishlist[req.params.id].quantity = 0;
-        wishlist[req.params.id].productTotal = 0;
 
-        res.redirect('/wishlist');
+            RunQuery(sqlStr, function (wishlist) {  
+                res.redirect('/wishlist');
+            });
+            
+        } else {
+            req.session.inCheckOut = true;
+            res.redirect('/sign-in');
+        }  
+
+        
     });
 
 router.route('/:id/add')
     .post(function (req, res, next) {
-        req.session.wishlist = req.session.wishlist || {};
-        var wishlist = req.session.wishlist;
+        
+        if (req.isAuthenticated()) {
+            var insertQuery = 'INSERT INTO wishlist\
+                VALUES(null, \''+
+                req.params.id + '\', \'' +
+                req.user.UserID + '\')';
 
-        var selectQuery = '\
-            SELECT Products.*, Categories.CategorySlug\
-            FROM Products\
-            INNER JOIN Categories\
-            ON Products.CategoryID = Categories.CategoryID\
-            WHERE ProductID = ' + req.params.id;
-
-        RunQuery(selectQuery, function (rows) {
-            var plusPrice = 0.00;
-            var inputQuantity = parseInt(req.body.quantity);
-
-            if (wishlist[req.params.id]) {
-                if (inputQuantity) {
-                    wishlist[req.params.id].quantity += inputQuantity;
-                    plusPrice = wishlist[req.params.id].ProductPrice * inputQuantity;
-                    wishlist[req.params.id].productTotal += plusPrice;
-                }
-                else {
-                    wishlist[req.params.id].quantity++;
-                    plusPrice = wishlist[req.params.id].ProductPrice;
-                    wishlist[req.params.id].productTotal += plusPrice;
-                }
-            }
-            else {
-                wishlist[req.params.id] = rows[0];
-
-                if (req.body.quantity) {
-                    wishlist[req.params.id].quantity = inputQuantity;
-                    plusPrice = wishlist[req.params.id].ProductPrice * inputQuantity;
-                    wishlist[req.params.id].productTotal = plusPrice;
-                    
-                }
-                else {
-                    rows[0].quantity = 1;
-                    plusPrice = wishlist[req.params.id].ProductPrice;
-                    wishlist[req.params.id].productTotal = plusPrice;
-                }
-            }
-
-
-            res.redirect('/wishlist');
-        });
+            RunQuery(insertQuery, function(result){
+                res.redirect('/wishlist');
+            });
+            
+        } else {
+            req.session.inCheckOut = true;
+            res.redirect('/sign-in');
+        }
+         
     });
 
 

@@ -52,7 +52,7 @@ app.use(passport.session());
     // use connect-flash for flash messages stored in session
 app.use(flash());
 
-const YOUR_DOMAIN = 'http://110.238.80.161:3000';
+const YOUR_DOMAIN = 'http://localhost:3000';
 
 app.post('/create-checkout-session', async (req, res) => {
   const session = await stripe.checkout.sessions.create({
@@ -74,9 +74,36 @@ app.post('/create-checkout-session', async (req, res) => {
   });
 
   res.redirect(303, session.url);
-
-
 });
+
+app.post('/buy-directly/:ProductPrice', async (req, res) => {
+
+      if (req.isAuthenticated()) {
+        const session = await stripe.checkout.sessions.create({
+          line_items: [
+              {
+                price_data: {
+                  currency: "MXN",
+                  unit_amount: req.params.ProductPrice * 100,
+                  product_data: {
+                    name: "Iocus",
+                  },
+                },
+                quantity: 1,
+              },
+            ],
+          mode: 'payment',
+          success_url: `${YOUR_DOMAIN}/checkout/order`,
+          cancel_url: `${YOUR_DOMAIN}/`,
+        });
+      
+        res.redirect(303, session.url);
+        
+    } else {
+        req.session.inCheckOut = true;
+        res.redirect('/sign-in');
+    } 
+  });
 
 // routes
 var routes = require('./routes/routes');
