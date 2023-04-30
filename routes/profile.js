@@ -102,9 +102,7 @@ router.route('/:username/change-password')
 router.route('/:username/orders')
     .get(isLoggedIn, function (req, res) {
 
-        var selectQuery = '\
-            SELECT *\
-            FROM Orders\
+        var selectQuery = 'SELECT * FROM Orders\
             WHERE UserID = ' + req.user.UserID;
 
         RunQuery(selectQuery, function (orders) {
@@ -119,17 +117,16 @@ router.route('/:username/orders')
 router.route('/:username/orders/:id')
     .get(isLoggedIn, function (req, res) {
         //get order info
-        var selectQuery = '\
-            SELECT *\
-            FROM Orders\
-            WHERE OrderID = ' + req.params.id;
+        var selectQuery = 'SELECT * FROM Orders WHERE OrderID = ' + req.params.id;
 
         RunQuery(selectQuery, function (order) {
             //get delivery info
-            selectQuery = '\
-                SELECT 1';
+            selectQueryCodigos = 'SELECT codigos.*, products.ProductName FROM astore.codigos\
+            INNER JOIN products\
+            ON codigos.juego = products.ProductID WHERE orden = \'' + req.params.id + '\' ORDER BY ProductName ASC';
+            console.log(selectQueryCodigos);
 
-            RunQuery(selectQuery, function (address) {
+            RunQuery(selectQueryCodigos, function (codigos) {
                 //get order info
                 selectQuery = '\
                     SELECT *\
@@ -150,101 +147,15 @@ router.route('/:username/orders/:id')
                         title: req.user.FullName,
                         customer: req.user,
                         order: order[0],
-                        address: address[0],
+                        codigos: codigos,
                         products: products
                     };
+
+                    console.log(codigos);
 
                     res.render('profile/viewOrder', contextDict);
                 });
             });
-        });
-    });
-
-router.route('/:username/addresses')
-    .get(isLoggedIn, function (req, res) {
-
-        var selectQuery = '\
-            SELECT *\
-            FROM Addresses\
-            WHERE UserID = ' + req.user.UserID;
-
-        RunQuery(selectQuery, function (addresses) {
-            res.render('profile/addresses', {
-                title: req.user.FullName,
-                customer: req.user,
-                addresses: addresses
-            });
-        });
-    });
-
-router.route('/:username/addresses/:id/edit')
-    .get(isLoggedIn, function (req, res) {
-
-        var selectQuery = '\
-            SELECT *\
-            FROM Addresses\
-            WHERE AddressID = ' + req.params.id;
-
-        RunQuery(selectQuery, function (address) {
-            res.render('profile/editAddress', {
-                title: req.user.FullName,
-                customer: req.user,
-                address: address[0]
-            });
-        });
-    })
-
-    .post(isLoggedIn, function (req, res) {
-        var form = req.body;
-
-        var updateQuery = '\
-                UPDATE Addresses\
-                SET Fullname = \'' + form.fullName + '\', \
-                    StreetAddress = \'' + form.streetAddress + '\', \
-                    PostCode = \'' + form.postcode + '\', \
-                    City = \'' + form.city + '\', \
-                    Country = \'' + form.country + '\' \
-                WHERE AddressID = ' + req.params.id;
-
-        RunQuery(updateQuery, function (result) {
-            res.redirect('/usr/' + req.user.Username + '/addresses/');
-        });
-    });
-
-router.route('/:username/addresses/:id/delete')
-    .post(isLoggedIn, function (req, res, next) {
-
-        var sqlStr = '\
-            DELETE FROM Addresses\
-            WHERE AddressID = ' + req.params.id;
-
-        RunQuery(sqlStr, function (result) {
-            res.redirect('/usr/' + req.user.Username + '/addresses/');
-        });
-    });
-
-router.route('/:username/addresses/add')
-    .get(isLoggedIn, function (req, res) {
-        res.render('profile/addAddress', {
-            title: req.user.FullName,
-            customer: req.user
-        });
-    })
-
-    .post(isLoggedIn, function (req, res) {
-        var form = req.body;
-
-        var insertQuery = '\
-                INSERT INTO Addresses\
-                VALUES (null, ' + req.user.UserID + ', \
-                    \'' + form.fullName + '\', \
-                    \'' + form.streetAddress + '\', \
-                    \'' + form.postcode + '\', \
-                    \'' + form.city + '\', \
-                    \'' + form.country + '\')';
-
-        RunQuery(insertQuery, function (result) {
-            res.redirect('/usr/' + req.user.Username + '/addresses/');
         });
     });
 

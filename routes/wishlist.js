@@ -34,12 +34,27 @@ router.route('/')
 
 
 
-router.route('/:id/delete')
+router.route('/:id/deleteSweetAlert')
     .post(function (req, res, next) {
         if (req.isAuthenticated()) {
             var sqlStr = 'DELETE FROM wishlist\
             WHERE IDUsuario =  \'' + req.user.UserID + '\' AND IDvideojuego =  \'' + req.params.id + '\'';
 
+            RunQuery(sqlStr, function (wishlist) {  
+                // res.redirect('/wishlist');
+            });
+            
+        } else {
+            req.session.inCheckOut = true;
+            res.redirect('/sign-in');
+        }          
+    });
+
+router.route('/:id/delete')
+    .post(function (req, res, next) {
+        if (req.isAuthenticated()) {
+            var sqlStr = 'DELETE FROM wishlist\
+            WHERE IDUsuario =  \'' + req.user.UserID + '\' AND IDvideojuego =  \'' + req.params.id + '\'';
 
             RunQuery(sqlStr, function (wishlist) {  
                 res.redirect('/wishlist');
@@ -48,9 +63,7 @@ router.route('/:id/delete')
         } else {
             req.session.inCheckOut = true;
             res.redirect('/sign-in');
-        }  
-
-        
+        }          
     });
 
 router.route('/:id/add')
@@ -63,7 +76,7 @@ router.route('/:id/add')
                 req.user.UserID + '\')';
 
             RunQuery(insertQuery, function(result){
-                res.redirect('/wishlist');
+                // res.redirect('/wishlist');
             });
             
         } else {

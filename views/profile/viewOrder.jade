@@ -62,3 +62,18 @@ block details
                                 span= ' $' + order.Total
                 br
                 br
+
+            .table-responsive.cart_info
+
+                table.content-table
+                    thead
+                        tr.cart_menu
+                            td(colspan=2) Códigos
+
+                    tbody
+                        each codigo in codigos
+                            tr
+                                td=codigo.ProductName
+                                td(style='color: green;')=codigo.codigo
+                br
+                br

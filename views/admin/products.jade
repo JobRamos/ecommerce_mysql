@@ -26,9 +26,15 @@ block details
                                 b Categoría:
                                 = ' ' + product.CategoryName
 
-                            p
-                                b Unidades en Stock:
-                                = ' ' + product.UnitsInStock
+                            if product.UnitsInStock < 1
+                                p(style="color: white; background-color: #d9534f;")
+                                    b Unidades en Stock:
+                                    = ' ' + product.UnitsInStock
+                            else   
+                                p
+                                    b Unidades en Stock:
+                                    = ' ' + product.UnitsInStock 
+                                
                             p
                                 b Año de lanzamiento:
                                 = ' ' + product.ManufactureYear

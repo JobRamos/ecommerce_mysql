@@ -10,7 +10,7 @@ module.exports = function (app, passport) {
     app.get('/reset-password', function (req, res) {
         // render the page and pass in any flash data if it exists
         if (req.session.inCheckOut){
-            var checkOutNoti = 'Necesitas ingresar para poder cerrar sesion!\
+            var checkOutNoti = 'Necesitas ingresar a Iocus paara poder realizar esta operación!\
                 Registrate si aun no tienes una cuenta!';
             req.session.inCheckOut = false;
         }
@@ -95,7 +95,7 @@ module.exports = function (app, passport) {
     app.get('/sign-in', function (req, res) {
         // render the page and pass in any flash data if it exists
         if (req.session.inCheckOut){
-            var checkOutNoti = 'Necesitas ingresar para poder cerrar sesion!\
+            var checkOutNoti = 'Necesitas ingresar a Iocus para poder realizar esta operación\
                 Registrate si aun no tienes una cuenta!';
             req.session.inCheckOut = false;
         }

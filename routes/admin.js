@@ -36,7 +36,7 @@ router.route('/cat')
 
         var sqlStr = '\
         SELECT *\
-        FROM Categories';
+        FROM Categories ORDER BY CategoryName DESC';
 
         RunQuery(sqlStr, function (categories) {
             var contextDict = {
@@ -126,7 +126,8 @@ router.route('/products')
                     SELECT Products.*, Categories.CategoryName\
                     FROM Products\
                     INNER JOIN Categories\
-                    ON Products.CategoryID = Categories.CategoryID';
+                    ON Products.CategoryID = Categories.CategoryID\
+                    ORDER BY UnitsInStock ASC, ProductName DESC';
 
         RunQuery(sqlStr, function (products) {
 

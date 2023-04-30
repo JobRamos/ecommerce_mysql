@@ -5,9 +5,19 @@ var router = express.Router();
 var database = require('../config/database');
 var RunQuery = database.RunQuery;
 
+// generamos string aleatorio para el codigo del videojuego
+function genRandonString(length) {
+    var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    var charLength = chars.length;
+    var result = '';
+    for ( var i = 0; i < length; i++ ) {
+       result += chars.charAt(Math.floor(Math.random() * charLength));
+    }
+    return result;
+ }
+
 router.route('/')
     .get(function (req, res, next) {
-        req.session.address = {};
         if (req.isAuthenticated()) {
             if (req.session.cart){
                 if (req.session.summary.totalQuantity > 0) {
@@ -23,49 +33,6 @@ router.route('/')
     });
 
 
-router.route('/delivery')
-    .get(function (req, res, next) {
-        req.session.address = {};
-
-        // show addresses
-        var selectQuery = '\
-            SELECT *\
-            FROM Addresses\
-            WHERE UserID = ' + req.user.UserID + ';';
-
-        RunQuery(selectQuery, function (rows) {
-            req.session.address = rows;
-            console.log(req.session.address);
-
-            var contextDict = {
-                title: 'Checkout - Delivery Address',
-                addresses: rows,
-                customer: req.user
-            };
-            res.render('checkout/delivery', contextDict);
-        });
-        // if choose from exist address => redirect
-        // if create new add
-        // 1. Open form
-        // 2. Save data
-        // 3. Redirect
-    });
-
-
-router.route('/delivery/:id')
-    .post(function (req, res, next) {
-        var selectQuery = '\
-            SELECT *\
-            FROM Addresses\
-            WHERE AddressID = ' + req.params.id + ';';
-
-        RunQuery(selectQuery, function (rows) {
-            req.session.address = rows[0];
-            console.log(req.session.address);
-            res.redirect('/checkout/review');
-        });
-    });
-
 router.route('/review')
     .get(function (req, res, next) {
         //show current cart
@@ -76,7 +43,6 @@ router.route('/review')
                 title: 'Checkout - Finalizar compra',
                 cart: req.session.showCart,
                 summary: req.session.cartSummary,
-                address: req.session.address,
                 customer: req.user
             };
             res.render('checkout/review', contextDict);
@@ -88,12 +54,9 @@ router.route('/review')
 
     });
 
-router.route('/order')
-    .get(function (req, res, next) {
+router.route('/order').get(function (req, res, next) {
         
-        var insertQuery = '\
-            INSERT INTO Orders\
-            VALUES(null, ' +
+        var insertQuery = 'INSERT INTO Orders VALUES(null, ' +
             req.user.UserID + ', ' +
             req.session.cartSummary.subTotal + ', ' +
             req.session.cartSummary.discount + ', ' +
@@ -105,22 +68,48 @@ router.route('/order')
                 console.log(item);
                 if (req.session.cart[item].quantity > 0) {
 
-                    insertQuery = '\
-                        INSERT INTO `Order Details`\
-                        VALUES(' +
+                    var insertQueryOrders = 'INSERT INTO `Order Details` VALUES(' +
                         rows.insertId + ', ' +
                         req.session.cart[item].ProductID + ', ' +
                         req.session.cart[item].quantity + ', ' +
                         req.session.cart[item].productTotal + ');';
+                    RunQuery(insertQueryOrders, function (result) {});
 
-                    updateQuery='UPDATE Products\
-                            SET UnitsInStock = (UnitsInStock - ' + req.session.cart[item].quantity +
-                        ') WHERE ProductID = ' + req.session.cart[item].ProductID;
+                    for (let i = 0; i < req.session.cart[item].quantity; i++) {
+                        var a = genRandonString(4);
+                        var b = genRandonString(4);
+                        var c = genRandonString(4);
+                        var codigoString = a + '-' +  b + '-' +  c;
+                        console.log("random", codigoString);
+                        
+                        var insertQueryCodigo = 'INSERT INTO codigos VALUES(null,' +
+                        rows.insertId + ', ' +
+                        req.session.cart[item].ProductID + ', \'' + codigoString + '\');';
+                        RunQuery(insertQueryCodigo, function (result5) {});
+                    }
 
-                    RunQuery(insertQuery, function (result) {
-                        RunQuery(updateQuery, function(result2){
-                        })
+                    var updateQueryQuantity = 'UPDATE Products SET UnitsInStock = (UnitsInStock - ' + req.session.cart[item].quantity +
+                        ') WHERE ProductID = ' + req.session.cart[item].ProductID + ';';
+
+                    var idWhere = req.session.cart[item].ProductID
+                    RunQuery(updateQueryQuantity, function(result2){
+
+                        var selectQueryUnits = 'SELECT UnitsInStock FROM Products WHERE ProductID = ' + idWhere + ';';
+                               
+                        RunQuery(selectQueryUnits, function (result3) {
+
+                            console.log(result3[0].UnitsInStock);
+                            if(result3[0].UnitsInStock <= 0) {
+                                var updateQueryFeature ='UPDATE Products SET Feature = 0 WHERE ProductID = ' + idWhere + ';';
+                                RunQuery(updateQueryFeature, function (result4) {});
+                            }
+                        });
+
                     });
+
+                    
+                        
+                    
                 }
             }
 
@@ -133,51 +122,45 @@ router.route('/order')
             WHERE OrderID = ' + rows.insertId;
 
             RunQuery(selectQuery, function (order) {
-                //get delivery info
+            
+                //get order info
                 selectQuery = '\
-                SELECT 1';
+                SELECT *\
+                FROM `Order Details`\
+                INNER JOIN (\
+                    SELECT Products.*, Categories.CategorySlug\
+                    FROM Products\
+                    INNER JOIN Categories\
+                    ON Products.CategoryID = Categories.CategoryID\
+                ) `Table`\
+                ON `Order Details`.ProductID = `Table`.ProductID\
+                WHERE OrderID = ' + order[0].OrderID;
 
-                RunQuery(selectQuery, function (address) {
+                RunQuery(selectQuery, function (products) {
+                    //clear cart
+                    req.session.cart = {};
+                    req.session.summary = {
+                        totalQuantity: 0,
+                        subTotal: 0.00,
+                        discount: 0.00,
+                        shipCost: 0.00,
+                        total: 0.00
+                    };
+                    req.session.cartSummary = {};
+                    req.session.showCart = {};
+
                     //get order info
-                    selectQuery = '\
-                    SELECT *\
-                    FROM `Order Details`\
-                    INNER JOIN (\
-                        SELECT Products.*, Categories.CategorySlug\
-                        FROM Products\
-                        INNER JOIN Categories\
-                        ON Products.CategoryID = Categories.CategoryID\
-                    ) `Table`\
-                    ON `Order Details`.ProductID = `Table`.ProductID\
-                    WHERE OrderID = ' + order[0].OrderID;
+                    var contextDict = {
+                        title: 'Orden ' + rows.insertId,
+                        customer: req.user,
+                        order: order[0],
+                        products: products
+                    };
 
-                    RunQuery(selectQuery, function (products) {
-                        //clear cart
-                        req.session.cart = {};
-                        req.session.summary = {
-                            totalQuantity: 0,
-                            subTotal: 0.00,
-                            discount: 0.00,
-                            shipCost: 0.00,
-                            total: 0.00
-                        };
-                        req.session.cartSummary = {};
-                        req.session.showCart = {};
-                        req.session.address = {};
-
-                        //get order info
-                        var contextDict = {
-                            title: 'Orden ' + rows.insertId,
-                            customer: req.user,
-                            order: order[0],
-                            address: address[0],
-                            products: products
-                        };
-
-                        res.render('checkout/confirm', contextDict);
-                    });
+                    res.render('checkout/confirm', contextDict);
                 });
             });
+        
         });
     });
 
