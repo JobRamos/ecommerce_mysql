@@ -124,7 +124,7 @@ module.exports = function (passport) {
                                     var mailOptions = {
                                     from: 'jobdavid10@hotmail.com',
                                     to: email,
-                                    subject: 'Iocus',
+                                    subject: 'Bienvenido a Iocus',
                                     text: 'Hola '+ fullName+', gracias por registrate en Iocus'
                                     };
 

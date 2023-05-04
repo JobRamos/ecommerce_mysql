@@ -9,9 +9,7 @@ router.route('/')
     .all(function (req, res, next) {
 
         if (req.isAuthenticated()) {
-            var sqlStr = '\
-            SELECT *\
-            FROM wishlist\
+            var sqlStr = 'SELECT * FROM wishlist\
             INNER JOIN products\
             ON wishlist.IDvideojuego = products.ProductID\
             WHERE IDUsuario =  \'' + req.user.UserID + '\'';

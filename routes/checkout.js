@@ -115,7 +115,7 @@ router.route('/order').get(function (req, res, next) {
                         var mailOptions = {
                         from: 'jobdavid10@hotmail.com',
                         to: email,
-                        subject: 'Iocus',
+                        subject: 'Iocus - Confirmación de compra',
                         text: 'Hola '+ fullName+', gracias por tu compra. A continuación se muestra el resumen de tu compra:'
                         +"Total de compra: " + req.session.cartSummary.total
                         };
