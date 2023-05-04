@@ -6,13 +6,12 @@ block content
         .container
 
                     if checkOutNoti
-                            if (signInError != '')
-                                p=signInError
-                            else
-                                p=checkOutNoti
-                        else
-                            if (signInError != '')
-                                p=signInError
+                        p(id="MessageError1", style="display: none;")=checkOutNoti
+                        p(id="MessageError2", value=signInError, style="display: none;")=''
+                    else
+                        p(id="MessageError1", style="display: none;")=''
+                        p(id="MessageError2", value=signInError, style="display: none;")=signInError
+                        p(id="MessageError3", value=signInErrorReset, style="display: none;")=signInErrorReset
                     
                     .center-login
                         h1 Iniciar Sesión
@@ -33,4 +32,27 @@ block content
                                 a(href='/sign-up') Regístrate en Iocus
                                 br
                                 br
-    ///form
+    script(src="https://cdn.jsdelivr.net/npm/sweetalert2@9")
+    script(type='text/javascript').
+        console.log(document.getElementById("MessageError1").textContent);
+        var MessageError = document.getElementById("MessageError1").textContent;
+        if (MessageError != ''){
+            Swal.fire({icon: 'warning',
+                        title: 'Operación invalida',
+                        text: 'Necesitas ingresar a Iocus para poder realizar esta operación',
+                        footer: '<a href="/sign-up">Regístrate aquí si aún no tienes una cuenta</a>'});
+        }
+
+        var MessageError2 = document.getElementById("MessageError2").textContent;
+        if (MessageError2 != ''){
+            Swal.fire({icon: 'warning',
+                        title: 'Datos invalidos',
+                        text: MessageError2});
+        }
+
+        var MessageError3 = document.getElementById("MessageError3").textContent;
+        if (MessageError3 != ''){
+            Swal.fire({icon: 'success',
+                        title: 'Email enviado',
+                        text: MessageError3});
+        }

@@ -23,42 +23,42 @@ html
         header#header
                
             //header_top
-            .header_top
-                .container
-                    .row
-                        .col-sm-6
-                            a(href='/')
-                                    img(src='/img/iocus-5.png', alt='Iocus Logo')
+            //- .header_top
+            //-     .container
+            //-         .row
+            //-             .col-sm-6
+            //-                 a(href='/')
+            //-                         img(src='/img/iocus-5.png', alt='Iocus Logo')
                                 
-                        .col-sm-6
-                            .shop-menu.pull-right
-                                ul.nav.navbar-nav
-                                    li
-                                        a(href='/wishlist')
-                                            i.fa.fa-heart
-                                            |  Lista de Deseos
-                                    -var orderCus = 'Iniciar Sesión'
-                                    -var link = '/sign-in'
-                                    if customer
-                                        -orderCus=customer.FullName
-                                        -link='/usr/'
-                                    li
-                                        a(href=link)
-                                            i.fa.fa-user
-                                            =orderCus
-                                    li
-                                        a(href='/cart')
-                                            i.fa.fa-shopping-cart
-                                            |  Carrito
-                                    //li
-                                    //    a(href='/checkout')
-                                    //        i.fa.fa-money
-                                    //        |  Checkout
-                                    if customer
-                                        li
-                                            a(href='/sign-out')
-                                                i.fa.fa-sign-out
-                                                |  Logout
+            //-             .col-sm-6
+            //-                 .shop-menu.pull-right
+            //-                     ul.nav.navbar-nav
+            //-                         li
+            //-                             a(href='/wishlist')
+            //-                                 i.fa.fa-heart
+            //-                                 |  Lista de Deseos
+            //-                         -var orderCus = 'Iniciar Sesión'
+            //-                         -var link = '/sign-in'
+            //-                         if customer
+            //-                             -orderCus=customer.FullName
+            //-                             -link='/usr/'
+            //-                         li
+            //-                             a(href=link)
+            //-                                 i.fa.fa-user
+            //-                                 =orderCus
+            //-                         li
+            //-                             a(href='/cart')
+            //-                                 i.fa.fa-shopping-cart
+            //-                                 |  Carrito
+            //-                         //li
+            //-                         //    a(href='/checkout')
+            //-                         //        i.fa.fa-money
+            //-                         //        |  Checkout
+            //-                         if customer
+            //-                             li
+            //-                                 a(href='/sign-out')
+            //-                                     i.fa.fa-sign-out
+            //-                                     |  Logout
             ///header_top
 
 
@@ -66,20 +66,51 @@ html
                 a(href='/')
                     img(src='/img/iocus-8.png', alt='Iocus Logo')
 
-                .header-center
-                    form(id='sign-in', action='/cat/buscar', method='POST')
-                        input.search-input(type='text', name='buscador', value=buscador, placeholder='Buscar', style="color: black;", class="searchTerm")
-                        button(type='submit', class="searchButton")
-                            i.fa.fa-search
+            
 
                 .header-right
-                    a(class={active: currentUrl === '/'}, href='/') Inicio
-                    a(class={active: currentUrl === '/cat/all'}, href='/cat/all') Productos
-                    a(class={active: currentUrl === '/contact-us'}, href='/contact-us') Contacto
 
+                    a 
+
+                        .header-center
+                            form(id='sign-in', action='/cat/buscar', method='POST')
+                                input.search-input(type='text', name='buscador', value=buscador, placeholder='Buscar', style="color: black;", class="searchTerm")
+                                button(type='submit', class="searchButton")
+                                    i.fa.fa-search
+
+                    
+                    a(class={active: currentUrl === '/'}, href='/') 
+                        i.fa.fa-home
+                        |      Inicio
+                    a(class={active: currentUrl === '/cat/all'}, href='/cat/all') 
+                        i.fa.fa-gamepad
+                        |      Productos
+                    a(class={active: currentUrl === '/cart'}, href='/cart')
+                        i.fa.fa-shopping-cart
+                        |       Carrito
+                    a(class={active: currentUrl === '/wishlist'}, href='/wishlist')
+                        i.fa.fa-heart
+                        |       Lista de Deseos
+                    -var orderCus = '             Iniciar Sesión'
+                    -var link = '/sign-in'
+                    if customer
+                        -orderCus="     " + customer.FullName
+                        -link='/usr/'
+                    a(class={active: currentUrl === link}, href=link)
+                        i.fa.fa-user
+                        =orderCus
+                    if customer
+                        a(href='/sign-out')
+                            i.fa.fa-sign-out
+                            |    Logout
+                    //- a(class={active: currentUrl === '/contact-us'}, href='/contact-us') Contacto
+
+            
 
             ///header-bottom
         ///header
+
+        
 
         block content
 
@@ -110,15 +141,17 @@ html
                         .col-sm-2
                             .companyinfo
                                 h2
-                                    span I
-                                    | ocus Store
+                                    a(href='/')
+                                        img(src='/img/iocus-5.png', alt='Iocus Logo', style="width: 35px;")
+                                    span   I
+                                    | ocus 
                                 p
                                     | Iocus es la tienda online 
                                     | comprometida a convertirse en el portal
                                     | de videojuegos mas usado en el mundo.
-                        .col-sm-3.col-sm-offset-1
+                        .col-sm-8.col-sm-offset-1
                             .single-widget
-                                h2 Quieres recibir notificaciones sobre lo nuevo en Iocus?
+                                h2 ¿Quieres recibir notificaciones sobre lo nuevo en Iocus?
                                 form.searchform(action='/subscribe', method='POST')
                                     input(type='text', name='email', placeholder='Email')
                                     button.btn.btn-default(type='submit')

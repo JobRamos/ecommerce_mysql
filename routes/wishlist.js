@@ -19,6 +19,7 @@ router.route('/')
             RunQuery(sqlStr, function (wishlist) {
                             
                 var contextDict = {
+                    currentUrl: '/wishlist',
                     title: 'Lista de deseos',
                     customer: req.user,
                     wishlist: wishlist

@@ -17,7 +17,6 @@ module.exports = function (app, passport) {
         var contextDict = {
             title: 'Resetear Contraseña',
             signInError: req.flash('signInError'),
-            checkOutNoti: checkOutNoti
         };
         res.render('resetPassword', contextDict);
     });
@@ -74,13 +73,12 @@ module.exports = function (app, passport) {
                     }
                     });
 
-                    var checkOutNoti = 'Se ha enviado una contrasena provicional al correo '+ req.body.email+'\
-                    Consulta tu email para recuperar tu acesso a Iocus!';
+                    var signInErrorReset = 'Se ha enviado una contrasena provicional al correo '+ req.body.email+'\
+                    Consulta tu email para recuperar tu acesso a Iocus';
 
                     var contextDict = {
                         title: 'Resetear Contraseña',
-                        signInError: req.flash('signInError'),
-                        checkOutNoti: checkOutNoti
+                        signInErrorReset: signInErrorReset
                     };
                     res.render('sign-in', contextDict);
                 });
@@ -101,6 +99,7 @@ module.exports = function (app, passport) {
         }
         var contextDict = {
             title: 'Sign In',
+            currentUrl: '/sign-in',
             signInError: req.flash('signInError'),
             checkOutNoti: checkOutNoti
         };

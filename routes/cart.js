@@ -44,6 +44,7 @@ router.route('/')
         req.session.cartSummary = cartSummary;
 
         var contextDict = {
+            currentUrl: '/cart',
             title: 'Cart',
             customer: req.user,
             cart: showCart,
@@ -92,6 +93,52 @@ router.route('/:id/delete')
         res.redirect('/cart');
     });
 
+
+router.route('/addButton')
+    .all(function (req, res, next) {
+        var summary = req.session.summary;
+        var cartSummary;
+
+        if (summary)
+            cartSummary = {
+                subTotal: summary.subTotal.toFixed(2),
+                discount: summary.discount.toFixed(2),
+                shipCost: summary.shipCost.toFixed(2),
+                total: summary.total.toFixed(2)
+            };
+
+        var cart = req.session.cart;
+        var showCart = [];
+
+        for (var item in cart) {
+            var aItem = cart[item];
+            if (cart[item].quantity > 0) {
+                showCart.push({
+                    Image: aItem.Image,
+                    ProductSlug: aItem.ProductSlug,
+                    CategorySlug: aItem.CategorySlug,
+                    ProductID: aItem.ProductID,
+                    ProductName: aItem.ProductName,
+                    Description: aItem.Description,
+                    UnitsInStock: aItem.UnitsInStock,
+                    ProductPrice: aItem.ProductPrice,
+                    quantity: aItem.quantity,
+                    productTotal: aItem.productTotal.toFixed(2)
+                });
+            }
+        }
+
+        req.session.showCart = showCart;
+        req.session.cartSummary = cartSummary;
+
+        var contextDict = {
+            title: 'Cart',
+            customer: req.user,
+            cart: showCart,
+            summary: cartSummary
+        };
+        // res.render('cart', contextDict);
+    });
 
 router.route('/:id/add')
     .post(function (req, res, next) {
@@ -155,7 +202,7 @@ router.route('/:id/add')
 
             summary.total = summary.subTotal - summary.discount + summary.shipCost;
 
-            res.redirect('/cart');
+            res.redirect('/cart/addButton');
         });
         
     });

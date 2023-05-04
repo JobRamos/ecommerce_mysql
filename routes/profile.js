@@ -35,6 +35,7 @@ router.route('/:username')
 
         res.render('profile/profile', {
             title: req.user.FullName,
+            currentUrl: '/usr/',
             customer: req.user
         });
     });
@@ -43,6 +44,7 @@ router.route('/:username/edit')
     .get(isLoggedIn, function (req, res) {
         res.render('profile/editProfile', {
             title: req.user.FullName,
+            currentUrl: '/usr/',
             customer: req.user
         });
     })
@@ -70,6 +72,7 @@ router.route('/:username/change-password')
     .get(isLoggedIn, function (req, res) {
         res.render('profile/changePassword', {
             title: req.user.FullName,
+            currentUrl: '/usr/',
             customer: req.user
         });
 
@@ -108,6 +111,7 @@ router.route('/:username/orders')
         RunQuery(selectQuery, function (orders) {
             res.render('profile/orders', {
                 title: req.user.FullName,
+                currentUrl: '/usr/',
                 customer: req.user,
                 orders: orders
             });
@@ -145,6 +149,7 @@ router.route('/:username/orders/:id')
 
                     var contextDict = {
                         title: req.user.FullName,
+                        currentUrl: '/usr/',
                         customer: req.user,
                         order: order[0],
                         codigos: codigos,

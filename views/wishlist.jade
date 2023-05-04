@@ -20,29 +20,29 @@ block content
                         a(class={active: currentUrl === '/'}, href='/')
                                             | Explorar productos
             else
-                each item in wishlist
-                    -var quantity = item.quantity;
-                    -var name = item.ProductName;
-                    -var productLink = '/cat/' + item.CategorySlug + '/' + item.ProductSlug + '/' + item.ProductID;
-                    -var unitPrice = item.ProductPrice;
-                    -var productTotal = item.productTotal;
-                    -var id = item.ProductID;
+                each product in wishlist
+                    -var quantity = product.quantity;
+                    -var name = product.ProductName;
+                    -var productLink = '/cat/' + product.CategorySlug + '/' + product.ProductSlug + '/' + product.ProductID;
+                    -var unitPrice = product.ProductPrice;
+                    -var productTotal = product.productTotal;
+                    -var id = product.ProductID;
                     tr
                         td.cart_product
                             a(href=productLink)
-                                img(src=item.Image, alt=name)
+                                img(src=product.Image, alt=name)
                         td.cart_description
                             h4
                                 a(href=productLink)= name
-                            p= item.Description
+                            p= product.Description
                         td(style='color: green;').cart_total
                             p.cart_total_price= ' $' + unitPrice
                         td.cart_delete
 
-                            form(action='/cart/' + id + '/add', method='POST')
-                                button.btn.btn-default(type='submit' class="btn btn-primary")
-                                    i.fa.fa-shopping-cart
-                                    |          Añadir al Carrito
+                            //- form(action='/cart/' + id + '/add', method='POST')
+                            //-     button.btn.btn-default(type='submit' class="btn btn-primary")
+                            //-         i.fa.fa-shopping-cart
+                            //-         |          Añadir al Carrito
 
                             form(action='/wishlist/' + id + '/delete', method='POST')
                                 button.btn.btn-default(type='submit' class="btn btn-danger")

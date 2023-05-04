@@ -21,7 +21,7 @@ block content
                                 img(src=product.Image, alt=product.ProductName)
                                 if (WhislistCount.WhislistCount < 1)
                                     form(action='/wishlist/' + product.ProductID + '/add', method='POST')
-                                        button.botonWishlist(type='submit', onclick="fireSweetAlert()")
+                                        button.botonWishlist(type='submit', onclick="addToWishlist()")
                                             i.fa.fa-heart
                                 else 
                                     form(action='/wishlist/' + product.ProductID + '/deleteSweetAlert', method='POST')
@@ -65,7 +65,7 @@ block content
                                             label Cantidad:
                                                 input(type='number', name='quantity',id="xd3", onchange="myFunction(this.value)",  value='1', min="1", max=product.UnitsInStock)
                                             br
-                                            button.btn.btn-default.add-to-cart(type='submit')
+                                            button.btn.btn-default.add-to-cart(type='submit', onclick="addToCart()")
                                                 i.fa.fa-shopping-cart
                                                 |          Añadir al carrito
                                         form(action='/cart/' + product.ProductID + '/buy-directly', method='POST')
@@ -74,6 +74,8 @@ block content
                                                 i.fa.fa-arrow-right
                                                 |          Comprar ahora    
                                     br
+
+                
                                 
                                 
     script(type='text/javascript').
@@ -82,7 +84,7 @@ block content
             document.getElementById("xd4").value = val;
         }
 
-        function fireSweetAlert() {
+        function addToWishlist() {
             Swal.fire({
                 title:'Lista de deseos',
                 text: 'Has añadido este producto a tu Lista de deseos',
@@ -104,5 +106,18 @@ block content
             }).then((result) => {
                 location.reload();
             });
+        }
+
+        function addToCart() {
+            Swal.fire({
+                title:'Carrito de compras',
+                text: 'Has añadido este producto a tu Carrito de compras',
+                icon:'success',
+                customClass: 'swal-wide',
+                footer: '<a href="/cart">Ir a mi Carrito de compras</a>'
+            }).then((result) => {
+                location.reload();
+            })
+            
         }
 

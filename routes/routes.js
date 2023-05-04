@@ -101,6 +101,7 @@ router.route('/cat/:catSlug')
 
                     var contextDict = {
                         title: 'Resultado de busqueda: ' + req.body.buscador,
+                        currentUrl: '/cat/all',
                         products: products,
                         categories: categories,
                         customer: req.user,
@@ -128,6 +129,7 @@ router.route('/cat/:catSlug')
 
                     var contextDict = {
                         title: products[0].CategoryName,
+                        currentUrl: '/cat/all',
                         products: products,
                         categories: categories,
                         customer: req.user

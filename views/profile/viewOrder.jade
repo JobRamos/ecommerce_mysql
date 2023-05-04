@@ -26,7 +26,7 @@ block details
                             tr
                                 td.cart_product
                                     a(href=productLink)
-                                        img(src=product.Image, alt=name, style='width: 120px;')
+                                        img(src=product.Image, alt=name, style='width: 120px; border: none;')
                                 td.cart_description
                                     h4
                                         a(href=productLink)= name
@@ -63,9 +63,12 @@ block details
                 br
                 br
 
+            button.botonRegresar(onclick="ocultarCodigos()", id="ocultar", style="display: none;") Ocultar codigos
+            button.botonRegresar(onclick="mostrarCodigos()", id="mostrar") Mostrar codigos
+
             .table-responsive.cart_info
 
-                table.content-table
+                table(id="tablaCodigos", style="display: none;").content-table
                     thead
                         tr.cart_menu
                             td(colspan=2) Códigos
@@ -77,3 +80,17 @@ block details
                                 td(style='color: green;')=codigo.codigo
                 br
                 br
+
+    script(type='text/javascript').
+
+        function mostrarCodigos() {
+            document.getElementById("tablaCodigos").style.display = "block";  
+            document.getElementById("ocultar").style.display = "block"; 
+            document.getElementById("mostrar").style.display = "none";   
+        }
+
+        function ocultarCodigos() {
+            document.getElementById("tablaCodigos").style.display = "none";   
+            document.getElementById("ocultar").style.display = "none"; 
+            document.getElementById("mostrar").style.display = "block";    
+        }

@@ -8,9 +8,8 @@ block details
                 th(colspan='5') Historial de Ordenes
         thead
             tr
-                td #
+                td ID Orden
                 td Fecha
-                td Estatus actual
                 td Total
                 td    
 
@@ -27,7 +26,6 @@ block details
                     tr
                         td= order.OrderID
                         td= order.OrderDate
-                        td= order.Status
                         td(style='color: green;')= ' $' + order.Total
                         td
                             form(action='/usr/' + customer.Username + '/orders/' + order.OrderID, method='GET')

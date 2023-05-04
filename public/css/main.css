@@ -174,7 +174,7 @@ figure {
   }
 
 .headerxd img{
-    height: 100px;
+    height: 40px;
   }
   
   /* Style the header links */
@@ -185,7 +185,7 @@ figure {
     text-align: center;
     padding: 12px;
     text-decoration: none;
-    font-size: 20px;
+    font-size: 16px;
     line-height: 25px;
     border-radius: 4px;
   }
@@ -205,7 +205,7 @@ figure {
   .header-right {
     float: right;
     margin-right: 50px;
-    margin-top: -7px;
+    /* margin-top: -7px; */
   }
 
   .header-center {
@@ -217,7 +217,7 @@ figure {
   }
 
   .header-center input {
-    width: 550px;
+    width: 450px;
     height: 40px;
     background: white;
     border-radius: 100px;
@@ -237,11 +237,11 @@ figure {
   }
 
   .headerxd .header-center input {
-    transform: translate(-180px, 45px);
+    transform: translate(-50px, -5px);
   } 
 
   .headerxd .header-center button {
-    transform: translate(-190px, 45px);
+    transform: translate(-60px, -5px);
   } 
   
   
@@ -506,11 +506,6 @@ h2{
     color: white;
     font-weight: 300;
 }
-
-h2{
-   margin: 10px;
-}
-
 
 
 h1 span{
@@ -843,7 +838,7 @@ ul.sub-menu {
 }
 
 .companyinfo p {
-    color: #7a54d7;
+    color: black;
     font-family: "Google Sans",Roboto,Arial,sans-serif;
     font-size: 12px;
     font-weight: 300;
@@ -1162,9 +1157,9 @@ ul.sub-menu {
 }
 
 .category-products {
-    margin-bottom: 35px;
+    /* margin-bottom: 35px;
     padding-bottom: 20px;
-    padding-top: 15px;
+    padding-top: 15px; */
 }
 
 .left-sidebar h2, .brands_products h2 {
@@ -2129,6 +2124,7 @@ h2.title {
 }
 
 .cart_product img{
+    border-radius: 12px;
     width: 120px;
 }
 
