@@ -5,6 +5,9 @@ var router = express.Router();
 var database = require('../config/database');
 var RunQuery = database.RunQuery;
 
+// email module
+var nodemailer = require('nodemailer');
+
 // generamos string aleatorio para el codigo del videojuego
 function genRandonString(length) {
     var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -93,6 +96,37 @@ router.route('/order').get(function (req, res, next) {
 
                     var idWhere = req.session.cart[item].ProductID
                     RunQuery(updateQueryQuantity, function(result2){
+
+                        var email = req.user.Email;
+                        var fullName = req.user.FullName;
+
+                        console.log(email);
+                        console.log(fullName);
+
+                        //send mail process
+                        var transporter = nodemailer.createTransport({
+                        service: 'hotmail',
+                        auth: {
+                            user: 'jobdavid10@hotmail.com',
+                            pass: 'Magenta77'
+                        }
+                        });
+
+                        var mailOptions = {
+                        from: 'jobdavid10@hotmail.com',
+                        to: email,
+                        subject: 'Iocus',
+                        text: 'Hola '+ fullName+', gracias por tu compra. A continuación se muestra el resumen de tu compra:'
+                        +"Total de compra: " + req.session.cartSummary.total
+                        };
+
+                        transporter.sendMail(mailOptions, function(error, info){
+                        if (error) {
+                            console.log(error);
+                        } else {
+                            console.log('Email sent: ' + info.response);
+                        }
+                        });
 
                         var selectQueryUnits = 'SELECT UnitsInStock FROM Products WHERE ProductID = ' + idWhere + ';';
                                
