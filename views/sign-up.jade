@@ -18,7 +18,7 @@ block content
 
                         form(id='sign-up', action='/sign-up', method='POST')
                             .txt_field
-                                input(type='text', name='fullName', required=true)
+                                input(type='text', name='fullName', required=true, pattern="[a-zA-Z]+")
                                 span
                                 label Nombre completo
                             .txt_field
@@ -26,19 +26,19 @@ block content
                                 span
                                 label Correo electronico
                             .txt_field
-                                input(type='text', name='phone', required=true)
+                                input(type='text', name='phone', required=true, minlength="10", maxlength="10", pattern="[0-9]+")
                                 span
                                 label Celular
                             .txt_field
-                                input(type='text', name='username', required=true)
+                                input(type='text', name='username', required=true, minlength="8", maxlength="28")
                                 span
                                 label Usuario
                             .txt_field
-                                input(type='password', required=true , name='password')
+                                input(type='password', required=true , name='password', minlength="8", maxlength="28")
                                 span
                                 label Contraseña
                             .txt_field
-                                input(type='password', required=true , name='rePassword')
+                                input(type='password', required=true , name='rePassword', minlength="8", maxlength="28")
                                 span
                                 label Confirmar Contraseña
                             input(type='submit', value='Regístrate')
