@@ -5,40 +5,74 @@ block content
         //form
         .container
 
-                    if checkOutNoti
-                        p(id="MessageError1", style="display: none;")=checkOutNoti
-                        p(id="MessageError2", value=signInError, style="display: none;")=''
-                    else
-                        p(id="MessageError1", style="display: none;")=''
-                        p(id="MessageError2", value=signInError, style="display: none;")=signInError
-                        p(id="MessageError3", value=signInErrorReset, style="display: none;")=signInErrorReset
-                    
-                    .center-login
-                        h1 Iniciar Sesión
-                        form(id='sign-in', action='/sign-in', method='POST')
-                            .txt_field
-                                input(type='text', required='true', name='username', maxlength="28")
-                                span
-                                label Usuario
-                            .txt_field
-                                input(type='password', required='true', name='password', maxlength="28")
-                                span
-                                label Contraseña
-                            a(href='/reset-password')
-                                .pass ¿Olvidaste tu  Contraseña?                                
-                            input(type='submit', value='Login')
-                            .signup_link
-                                | ¿Aún no tienes cuenta? 
-                                a(href='/sign-up') Regístrate en Iocus
-                                br
-                                br
+            if checkOutNoti
+                p(id="MessageError1", style="display: none;")=checkOutNoti
+                p(id="MessageError2", value=signInError, style="display: none;")=''
+            else
+                p(id="MessageError1", style="display: none;")=''
+                p(id="MessageError2", value=signInError, style="display: none;")=signInError
+                p(id="MessageError3", value=signInErrorReset, style="display: none;")=signInErrorReset
+            
+            .center-login
+                h1 Iniciar Sesión
+                form(id='sign-in', action='/sign-in', method='POST', onsubmit = "return(validatexd());")
+                    .txt_field
+                        input(type='text', name='username', id='username')
+                        span
+                        label Usuario
+                    p(id="errorUsuario" style="color: red; display: none;")
+                    .txt_field
+                        input(type='password', name='password', id='password')
+                        span
+                        label Contraseña
+                    p(id="errorPassword" style="color: red; display: none;")
+                    a(href='/reset-password')
+                        .pass ¿Olvidaste tu  Contraseña?                                
+                    input(type='submit', value='Iniciar Sesión')
+                    .signup_link
+                        | ¿Aún no tienes cuenta? 
+                        a(href='/sign-up') Regístrate en Iocus
+                br
+                br
+    
     script(src="https://cdn.jsdelivr.net/npm/sweetalert2@9")
     script(type='text/javascript').
-        console.log(document.getElementById("MessageError1").textContent);
+        function validatexd() {
+
+            var username = document.getElementById("username").value;
+            var password = document.getElementById("password").value;
+            var aprobado = 1;
+
+            var paragraph = document.getElementById("errorUsuario");
+            paragraph.style.display = "none";
+            if(username == "" || username.length < 1){
+                paragraph.textContent = "*Por favor ingresa un usuario";
+                paragraph.style.display = "block"; 
+                aprobado = 0;
+            }
+
+            var paragraph = document.getElementById("errorPassword");
+            paragraph.style.display = "none";
+            if(password == "" || password.length < 1){
+                paragraph.textContent = "*Por favor ingresa una contraseña";
+                paragraph.style.display = "block"; 
+                aprobado = 0;
+            }
+
+        
+            if(aprobado == 0) {
+                return( false );
+            }else if(aprobado == 1) {
+                return( true );
+            }
+            
+        }
+
         var MessageError = document.getElementById("MessageError1").textContent;
         if (MessageError != ''){
             Swal.fire({icon: 'warning',
                         title: 'Operación invalida',
+                        confirmButtonColor: '#7a54d7',
                         text: 'Necesitas ingresar a Iocus para poder realizar esta operación',
                         footer: '<a href="/sign-up">Regístrate aquí si aún no tienes una cuenta</a>'});
         }
@@ -47,6 +81,7 @@ block content
         if (MessageError2 != ''){
             Swal.fire({icon: 'warning',
                         title: 'Datos invalidos',
+                        confirmButtonColor: '#7a54d7',
                         text: MessageError2});
         }
 
@@ -54,5 +89,8 @@ block content
         if (MessageError3 != ''){
             Swal.fire({icon: 'success',
                         title: 'Email enviado',
+                        confirmButtonColor: '#7a54d7',
                         text: MessageError3});
         }
+
+        

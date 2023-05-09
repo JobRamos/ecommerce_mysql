@@ -2,7 +2,7 @@ extends info
 
 block details
     
-    h2= 'Orden ' + order.OrderID
+    h2= 'Orden ' + order.OrderID + ' finalizada'
     h4= 'Fecha de compra: ' + order.OrderDate
     .row
         .col-sm-8
@@ -11,7 +11,7 @@ block details
                     thead
                         tr
                             td(style='max-width: 120px;').image Imagen
-                            td Producto
+                            td videojuego
                             td Precio Unitario 
                             td Cantidad
                             td Total
@@ -65,12 +65,13 @@ block details
 
             button.botonRegresar(onclick="ocultarCodigos()", id="ocultar", style="display: none;") Ocultar codigos
             button.botonRegresar(onclick="mostrarCodigos()", id="mostrar") Mostrar codigos
+            br
 
             .table-responsive.cart_info
 
-                table(id="tablaCodigos", style="display: none;").content-table
+                table(id="tablaCodigos", style="display: none; width: 10px;").content-table
                     thead
-                        tr.cart_menu
+                        tr
                             td(colspan=2) Códigos
 
                     tbody

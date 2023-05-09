@@ -2,8 +2,22 @@
 var database = require('../config/database');
 var RunQuery = database.RunQuery;
 
+// Generate Hash
+var bcrypt = require('bcrypt-nodejs');
+
 // email module
 var nodemailer = require('nodemailer');
+
+// generamos string aleatorio para resetear password
+function genRandonString(length) {
+    var chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+?!#$%--+=&()';
+    var charLength = chars.length;
+    var result = '';
+    for ( var i = 0; i < length; i++ ) {
+       result += chars.charAt(Math.floor(Math.random() * charLength));
+    }
+    return result;
+ }
 
 module.exports = function (app, passport) {
 
@@ -16,6 +30,7 @@ module.exports = function (app, passport) {
         }
         var contextDict = {
             title: 'Resetear Contraseña',
+            currentUrl: '/sign-in',
             signInError: req.flash('signInError'),
         };
         res.render('resetPassword', contextDict);
@@ -35,13 +50,14 @@ module.exports = function (app, passport) {
                 Registrate si aun no tienes una cuenta!';
                 var contextDict = {
                     title: 'Resetear Contraseña',
+                    currentUrl: '/sign-in',
                     signInError: req.flash('signInError'),
                     checkOutNoti: checkOutNoti
                 };
                 res.render('resetPassword', contextDict);
             }else if(mail[0].MailCount > 0){
-                var provitionalPasswordUnecrypted =  "hxxjh736183+";
-                var provitionalPassword = "$2a$10$Xn4QzJcs9TTz0a19DDIBvu1XYq09/Siy8rVkk1L/9ekUS.fsLMPES"
+                var provitionalPasswordUnecrypted =  genRandonString(12);
+                var provitionalPassword = bcrypt.hashSync(provitionalPasswordUnecrypted, null, null);
                 var sqlStr = '\
                 UPDATE users\
                 SET Password = \'' + provitionalPassword + '\' WHERE Email = \'' + req.body.email + '\'';
@@ -53,13 +69,13 @@ module.exports = function (app, passport) {
                     var transporter = nodemailer.createTransport({
                     service: 'hotmail',
                     auth: {
-                        user: 'jobdavid10@hotmail.com',
+                        user: 'iocus_2023@outlook.com',
                         pass: 'Magenta77'
                     }
                     });
 
                     var mailOptions = {
-                    from: 'jobdavid10@hotmail.com',
+                    from: 'iocus_2023@outlook.com',
                     to: req.body.email,
                     subject: 'Iocus - Reseteo de contraseña',
                     text: 'Hola, la contrasena provicional que se te ha sido asignada es la siguiente: ' + provitionalPasswordUnecrypted + '. Por favor ingresa a Iocus con esta contrasena para poder generar una nueva contrasena.'
@@ -76,8 +92,10 @@ module.exports = function (app, passport) {
                     var signInErrorReset = 'Se ha enviado una contrasena provicional al correo '+ req.body.email+'\
                     Consulta tu email para recuperar tu acesso a Iocus';
 
+                    
                     var contextDict = {
                         title: 'Resetear Contraseña',
+                        currentUrl: '/sign-in',
                         signInErrorReset: signInErrorReset
                     };
                     res.render('sign-in', contextDict);
@@ -98,7 +116,7 @@ module.exports = function (app, passport) {
             req.session.inCheckOut = false;
         }
         var contextDict = {
-            title: 'Sign In',
+            title: 'Iniciar Sesión',
             currentUrl: '/sign-in',
             signInError: req.flash('signInError'),
             checkOutNoti: checkOutNoti

@@ -3,7 +3,7 @@ extends admin
 block details
 
     .center-login
-        h1 Añadir nuevo producto
+        h1 Añadir nuevo videojuego
         form(id='addProduct', action='/admin/products/add', method='POST')
             .txt_field
                 input(type='text', id='name', name='name', required=true)
@@ -37,7 +37,7 @@ block details
                 label Imagen de la categoría
             .radio_field
                 span
-                label Mostrar producto como disponible
+                label Mostrar videojuego como disponible
                 
                 input(type='radio', id='featureYes', name='feature', value=1)
                 label(for='featureYes') Si
@@ -47,7 +47,7 @@ block details
                 label(for='featureNo') No
 
                 br
-            input(type='submit', value='Añadir producto')
+            input(type='submit', value='Añadir videojuego')
             br
             br
     br

@@ -101,6 +101,7 @@ body {
     font-family: "Google Sans",Roboto,Arial,sans-serif;
     position: relative;
     font-weight: 400;
+    text-align: justify;
     background-color: #191919;
     background: rgb(0,0,0);
     background: linear-gradient(180deg, rgba(0,0,0,1) 25%, rgba(122,84,215,1) 79%, rgba(195,84,180,1) 96%, rgba(226,214,243,1) 100%);
@@ -191,12 +192,13 @@ figure {
   }
 
   /* Change the background color on mouse-over */
-  .headerxd a:hover {
+  .headerxd .header-right a:hover {
     color: #7a54d7;
+    background-color: white;
   }
   
   /* Style the active/current link*/
-  .headerxd a.active {
+  .headerxd .header-right a.active {
     background-color: #7a54d7;
     color: white;
   }
@@ -225,6 +227,7 @@ figure {
     font-size: 15px;
     color: #7a54d7;
   }
+  
  
 
 .header-center button{
@@ -237,11 +240,11 @@ figure {
   }
 
   .headerxd .header-center input {
-    transform: translate(-50px, -5px);
+    transform: translate(100px, -5px);
   } 
 
   .headerxd .header-center button {
-    transform: translate(-60px, -5px);
+    transform: translate(96px, -5px);
   } 
   
   
@@ -2275,7 +2278,7 @@ input:hover{
     font-size: 20px;
     margin-left: 0;
     margin-bottom: 5px;
-    padding: 10px 25px;
+    /* padding: 10px 25px; */
     font-family: "Google Sans",Roboto,Arial,sans-serif;
 }
 

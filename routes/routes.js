@@ -17,7 +17,7 @@ router.all('/', function (req, res, next) {
             FROM Products\
             INNER JOIN Categories\
             ON Products.CategoryID = Categories.CategoryID\
-            WHERE Feature = 1';
+            WHERE Feature = 1 AND UnitsInStock > 0';
 
         RunQuery(sqlStr, function (products) {
             var contextDict = {
@@ -65,7 +65,7 @@ router.route('/cat/:catSlug')
                 FROM Products\
                 INNER JOIN Categories\
                 ON Products.CategoryID = Categories.CategoryID\
-                WHERE Feature = 1';
+                WHERE Feature = 1 AND UnitsInStock > 0';
 
             RunQuery(selectQuery, function (products) {
 
@@ -77,7 +77,7 @@ router.route('/cat/:catSlug')
 
                     var contextDict = {
                         currentUrl: '/cat/all',
-                        title: 'Todos los Productos',
+                        title: 'Todos los videojuegos',
                         products: products,
                         categories: categories,
                         customer: req.user
@@ -89,7 +89,7 @@ router.route('/cat/:catSlug')
         }
         else if (req.params.catSlug == "buscar"){
             var sqlStr = '\
-                SELECT Products.* FROM Products WHERE ProductName LIKE \'%' + req.body.buscador + '%\'';
+                SELECT Products.* FROM Products WHERE ProductName LIKE \'%' + req.body.buscador + '%\' AND  Feature = 1 AND UnitsInStock > 0';
 
             RunQuery(sqlStr, function (products) {
 
@@ -117,7 +117,7 @@ router.route('/cat/:catSlug')
                 FROM Products\
                 INNER JOIN Categories\
                 ON Products.CategoryID = Categories.CategoryID\
-                WHERE Categories.CategorySlug = \'' + req.params.catSlug + '\' AND Feature = 1';
+                WHERE Categories.CategorySlug = \'' + req.params.catSlug + '\' AND Feature = 1 AND UnitsInStock > 0';
 
             RunQuery(sqlStr, function (products) {
 

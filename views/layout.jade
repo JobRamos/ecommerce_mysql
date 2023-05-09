@@ -66,11 +66,7 @@ html
                 a(href='/')
                     img(src='/img/iocus-8.png', alt='Iocus Logo')
 
-            
-
-                .header-right
-
-                    a 
+                a 
 
                         .header-center
                             form(id='sign-in', action='/cat/buscar', method='POST')
@@ -78,13 +74,20 @@ html
                                 button(type='submit', class="searchButton")
                                     i.fa.fa-search
 
+
+                .header-right
+
+                    
+
+                    
+
                     
                     a(class={active: currentUrl === '/'}, href='/') 
                         i.fa.fa-home
                         |      Inicio
                     a(class={active: currentUrl === '/cat/all'}, href='/cat/all') 
                         i.fa.fa-gamepad
-                        |      Productos
+                        |      Videojuegos
                     a(class={active: currentUrl === '/cart'}, href='/cart')
                         i.fa.fa-shopping-cart
                         |       Carrito

@@ -65,6 +65,8 @@ router.route('/order').get(function (req, res, next) {
             req.session.cartSummary.discount + ', ' +
             req.session.cartSummary.total + ', NOW(), \'Order Received\');';
 
+        var totalMail = req.session.cartSummary.total;
+
         RunQuery(insertQuery, function (rows) {
             console.log(req.session.cart);
             for (var item in req.session.cart) {
@@ -78,12 +80,15 @@ router.route('/order').get(function (req, res, next) {
                         req.session.cart[item].productTotal + ');';
                     RunQuery(insertQueryOrders, function (result) {});
 
+                    var codigosMail = "";
+
                     for (let i = 0; i < req.session.cart[item].quantity; i++) {
                         var a = genRandonString(4);
                         var b = genRandonString(4);
                         var c = genRandonString(4);
                         var codigoString = a + '-' +  b + '-' +  c;
                         console.log("random", codigoString);
+                        codigosMail += req.session.cart[item].ProductName + ", código: " + codigoString + "\n";
                         
                         var insertQueryCodigo = 'INSERT INTO codigos VALUES(null,' +
                         rows.insertId + ', ' +
@@ -107,17 +112,19 @@ router.route('/order').get(function (req, res, next) {
                         var transporter = nodemailer.createTransport({
                         service: 'hotmail',
                         auth: {
-                            user: 'jobdavid10@hotmail.com',
+                            user: 'iocus_2023@outlook.com',
                             pass: 'Magenta77'
                         }
                         });
 
                         var mailOptions = {
-                        from: 'jobdavid10@hotmail.com',
+                        from: 'iocus_2023@outlook.com',
                         to: email,
                         subject: 'Iocus - Confirmación de compra',
-                        text: 'Hola '+ fullName+', gracias por tu compra. A continuación se muestra el resumen de tu compra:'
-                        +"Total de compra: " + req.session.cartSummary.total
+                        text: 'Hola '+ fullName+', gracias por tu compra. \n'+
+                        'A continuación se muestra el resumen de tu compra: \n'+
+                        "Total de compra: " + totalMail + '\n'+
+                        "Articulos comprados: \n"+ codigosMail
                         };
 
                         transporter.sendMail(mailOptions, function(error, info){
@@ -183,15 +190,18 @@ router.route('/order').get(function (req, res, next) {
                     req.session.cartSummary = {};
                     req.session.showCart = {};
 
-                    //get order info
-                    var contextDict = {
-                        title: 'Orden ' + rows.insertId,
-                        customer: req.user,
-                        order: order[0],
-                        products: products
-                    };
+                    // //get order info
+                    // var contextDict = {
+                    //     title: 'Orden ' + rows.insertId,
+                    //     customer: req.user,
+                    //     order: order[0],
+                    //     products: products
+                    // };                    
 
-                    res.render('checkout/confirm', contextDict);
+                    // res.render('checkout/confirm', contextDict);
+                    res.redirect('/usr/'+ req.user.Username+'/orders/'+rows.insertId)
+
+                    
                 });
             });
         

@@ -13,6 +13,8 @@ var RunQuery = database.RunQuery;
 // email module
 var nodemailer = require('nodemailer');
 
+
+
 // expose this function to our app using module.exports
 module.exports = function (passport) {
 
@@ -74,76 +76,86 @@ module.exports = function (passport) {
             // find a user whose email is the same as the forms email
             // we are checking to see if the user trying to login already exists
             var email = req.body.email;
+            var phone = req.body.phone;
 
             if (password != req.body.rePassword) {
                 return done(null, false, req.flash('signUpError', 'Las contraseñas ingresadas no coinciden. Por favor ingresa un par de contraseñas válidas.'));
             }
             else {
 
-                var selectQuery = 'SELECT *\
-                    FROM users\
+                var selectQuery = 'SELECT * FROM users\
                     WHERE email = \'' + email + '\'';
                 RunQuery(selectQuery, function (emailRows) {
                     if (emailRows.length > 0) {
                         return done(null, false, req.flash('signUpError', 'El email ingresado ya ha sido registrado previamente en Iocus. Por favor ingresa otro email.'));
                     }
                     else {
-                        selectQuery = '\
-                        SELECT *\
-                        FROM users\
-                        WHERE username = \'' + username + '\'';
-                        RunQuery(selectQuery, function (usernameRows) {
-                            if (usernameRows.length > 0) {
-                                return done(null, false, req.flash('signUpError', 'El usuario ingresado ya ha sido registrado previamente en Iocus. Por favor ingresa otro nombre de usuario.'));
+
+                        var selectQuery = 'SELECT * FROM users WHERE Phone = \'' + phone + '\'';
+                        RunQuery(selectQuery, function (phoneRows) {
+                            if (phoneRows.length > 0) {
+                                return done(null, false, req.flash('signUpError', 'El celular ingresado ya ha sido registrado previamente en Iocus. Por favor ingresa otro celular.'));
                             }
                             else {
-                                // if there is no user with that user and email
-                                var fullName = req.body.fullName;
-                                var phone = req.body.phone;
-                                var passwordHash = bcrypt.hashSync(password, null, null);
 
-                                var insertQuery = 'INSERT INTO Users\
-                                    VALUES(null,\
-                                    \'' + fullName + '\', \
-                                    \'' + phone + '\', \
-                                    \'' + email + '\', \
-                                    \'' + username + '\', \
-                                    \'' + passwordHash + '\', 0)';
+                        
 
-                                RunQuery(insertQuery, function (insertResult) {
-                                    
-                                    //send mail process
-                                    var transporter = nodemailer.createTransport({
-                                    service: 'hotmail',
-                                    auth: {
-                                        user: 'jobdavid10@hotmail.com',
-                                        pass: 'Magenta77'
+                                selectQuery = 'SELECT * FROM users\
+                                WHERE username = \'' + username + '\'';
+                                RunQuery(selectQuery, function (usernameRows) {
+                                    if (usernameRows.length > 0) {
+                                        return done(null, false, req.flash('signUpError', 'El usuario ingresado ya ha sido registrado previamente en Iocus. Por favor ingresa otro nombre de usuario.'));
                                     }
-                                    });
+                                    else {
+                                        // if there is no user with that user and email
+                                        var fullName = req.body.fullName;
+                                        var passwordHash = bcrypt.hashSync(password, null, null);
 
-                                    var mailOptions = {
-                                    from: 'jobdavid10@hotmail.com',
-                                    to: email,
-                                    subject: 'Bienvenido a Iocus',
-                                    text: 'Hola '+ fullName+', gracias por registrate en Iocus'
-                                    };
+                                        var insertQuery = 'INSERT INTO Users\
+                                            VALUES(null,\
+                                            \'' + fullName + '\', \
+                                            \'' + phone + '\', \
+                                            \'' + email + '\', \
+                                            \'' + username + '\', \
+                                            \'' + passwordHash + '\', 0)';
 
-                                    transporter.sendMail(mailOptions, function(error, info){
-                                    if (error) {
-                                        console.log(error);
-                                    } else {
-                                        console.log('Email sent: ' + info.response);
+                                        RunQuery(insertQuery, function (insertResult) {
+                                            
+                                            //send mail process
+                                            var transporter = nodemailer.createTransport({
+                                            service: 'hotmail',
+                                            auth: {
+                                                user: 'iocus_2023@outlook.com',
+                                                pass: 'Magenta77'
+                                            }
+                                            });
+
+                                            var mailOptions = {
+                                            from: 'iocus_2023@outlook.com',
+                                            to: email,
+                                            subject: 'Bienvenido a Iocus',
+                                            text: 'Hola '+ fullName+', gracias por registrate en Iocus'
+                                            };
+
+                                            transporter.sendMail(mailOptions, function(error, info){
+                                            if (error) {
+                                                console.log(error);
+                                            } else {
+                                                console.log('Email sent: ' + info.response);
+                                            }
+                                            });
+                                            
+                                            // finsih singup
+                                            var user = {
+                                                UserID: insertResult.insertId
+                                            };
+                                            return done(null, user);
+                                        });
                                     }
-                                    });
-                                    
-                                    // finsih singup
-                                    var user = {
-                                        UserID: insertResult.insertId
-                                    };
-                                    return done(null, user);
                                 });
                             }
                         });
+                        
                     }
                 });
             }

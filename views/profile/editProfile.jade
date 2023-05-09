@@ -5,13 +5,22 @@ block details
         //form
 
         .container
-            
+
+            if checkOutNoti
+                if (signUpError != '')
+                    p=signUpError+"xd1"
+                else
+                    p=checkOutNoti+"xd2"
+            else
+                if (signUpError != '')
+                    p(id="MessageError", value=signUpError, style="display: none;")=signUpError
+
             .center-login
                 h1 Editar Información
 
                 form(id='editProfile', action='/usr/' + customer.Username + '/edit', method='POST')
                     .txt_field
-                        input(type='text', id='fullname', name='fullName', value=customer.FullName required=true)
+                        input(type='text', id='fullname', name='fullName', value=customer.FullName required=true pattern="^[a-zA-Z][a-zA-Z\\s]+$" maxlength="50")
                         span
                         label Nombre completo
                     .txt_field
@@ -19,7 +28,7 @@ block details
                         span
                         label Correo electronico
                     .txt_field
-                        input(type='tel', id='phone', name='phone', value=customer.Phone required=true)
+                        input(type='tel', id='phone', name='phone', value=customer.Phone, required=true, minlength="10", maxlength="10", pattern="[0-9]+")
                         span
                         label Celular
                     .txt_field
@@ -29,4 +38,14 @@ block details
                     input(type='submit', value='Actualizar perfil')
                     
        
-        
+    script(src="https://cdn.jsdelivr.net/npm/sweetalert2@9")
+    script(type='text/javascript').
+
+        var MessageError = document.getElementById("MessageError").textContent;
+        console.log(document.getElementById("MessageError").textContent); 
+        if (MessageError != ''){
+            Swal.fire({icon: 'warning',
+                        title: 'Datos invalidos',
+                        text: MessageError,
+                        confirmButtonColor: '#7a54d7'});
+        }

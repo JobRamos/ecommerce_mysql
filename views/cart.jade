@@ -13,7 +13,7 @@ block content
       thead
         tr
             td Imagen
-            td Producto
+            td Videojuego
             td Precio Unitario
             td Cantidad
             td Total
@@ -23,9 +23,9 @@ block content
                 tr
                     td
                     td(colspan="4", style="text-align: center;")
-                        p= "No se encontraron productos en el carrito"
+                        p= "No se encontraron videojuegos en el carrito"
                         a(class={active: currentUrl === '/'}, href='/') 
-                                            | Explorar productos
+                                            | Explorar videojuegos
             else
                 each item in cart
                     -var quantity = item.quantity;
@@ -86,4 +86,4 @@ block content
                                                 span= ' $' + summary.total
                                         tr
                                             td(colspan=2).text-right
-                                                a.btn.btn-default.check_out(href='/checkout/review/') Comprar
+                                                a.add-to-cart(href='/checkout/review/') Comprar

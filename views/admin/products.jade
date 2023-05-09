@@ -5,7 +5,7 @@ block details
     form(action='/admin/products/add', method='GET')
         button.btn.btn-default(type='submit', class="btn btn-success")
             i.fa.fa-plus
-            = ' Añadir nuevo producto'
+            = ' Añadir nuevo videojuego'
             
     .row
         .features_items
@@ -23,8 +23,16 @@ block details
                             p= product.Description
 
                             p
-                                b Categoría:
+                                b Plataforma:
                                 = ' ' + product.CategoryName
+                               
+                            p
+                                b Año de lanzamiento:
+                                = ' ' + product.ManufactureYear
+
+                            p
+                                b Precio:
+                                = ' $' + product.ProductPrice
 
                             if product.UnitsInStock < 1
                                 p(style="color: white; background-color: #d9534f;")
@@ -34,22 +42,17 @@ block details
                                 p
                                     b Unidades en Stock:
                                     = ' ' + product.UnitsInStock 
-                                
-                            p
-                                b Año de lanzamiento:
-                                = ' ' + product.ManufactureYear
 
-                            p
-                                b Precio:
-                                = ' $' + product.ProductPrice
-
-                            - var feature = 'Si'
-                            if (product.Feature == 0)
+                            - var feature = 'Si'                             
+                            if product.Feature == 0
                                 - feature = 'No'
-                            p
-                                b Mostrar producto como disponible:
-                                = ' ' + feature
-
+                                p(style="color: white; background-color: #d9534f;")
+                                    b Mostrar videojuego como disponible:
+                                    = ' ' + feature
+                            else   
+                                p
+                                    b Mostrar videojuego como disponible:
+                                    = ' ' + feature
 
 
                         .col-sm-3

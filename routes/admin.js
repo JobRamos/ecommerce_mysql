@@ -40,7 +40,8 @@ router.route('/cat')
 
         RunQuery(sqlStr, function (categories) {
             var contextDict = {
-                title: 'Admin - Categoría',
+                title: 'Admin - Categorías',
+                currentUrl: '/usr/',
                 categories: categories,
                 customer: req.user
             };
@@ -60,6 +61,7 @@ router.route('/cat/:id/edit')
         RunQuery(sqlStr, function (category) {
             var contextDict = {
                 title: 'Admin - Editar Categoría',
+                currentUrl: '/usr/',
                 category: category[0],
                 customer: req.user
             };
@@ -99,6 +101,7 @@ router.route('/cat/add')
     .get(isAdmin, function (req, res, next) {
         var contextDict = {
             title: 'Admin - Añadir Categoría',
+            currentUrl: '/usr/',
             customer: req.user
         };
 
@@ -132,7 +135,8 @@ router.route('/products')
         RunQuery(sqlStr, function (products) {
 
             var contextDict = {
-                title: 'Admin - Productos',
+                title: 'Admin - Videojuegos',
+                currentUrl: '/usr/',
                 products: products,
                 customer: req.user
             };
@@ -159,7 +163,8 @@ router.route('/products/:id/edit')
 
             RunQuery(sqlStr, function (categories) {
                 var contextDict = {
-                    title: 'Admin - Editar Producto',
+                    title: 'Admin - Editar videojuego',
+                    currentUrl: '/usr/',
                     product: product[0],
                     categories: categories,
                     customer: req.user
@@ -211,7 +216,8 @@ router.route('/products/add')
 
         RunQuery(sqlStr, function (categories) {
             var contextDict = {
-                title: 'Admin - Add Product',
+                title: 'Admin - Añadir videojuego',
+                currentUrl: '/usr/',                
                 categories: categories,
                 customer: req.user
             };
@@ -253,6 +259,7 @@ router.route('/orders')
 
             var contextDict = {
                 title: 'Admin - Ordenes',
+                currentUrl: '/usr/',
                 customer: req.user,
                 orders: orders
             };
@@ -300,6 +307,7 @@ router.route('/orders/:id')
 
                         var contextDict = {
                             title: 'Admin - Ordenes',
+                            currentUrl: '/usr/',
                             customer: req.user,
                             order: order[0],
                             orderCustomer: orderCustomer[0],
@@ -343,6 +351,7 @@ router.route('/orders/:id/update')
                 RunQuery(selectQuery, function (products) {
                     var contextDict = {
                         title: 'Admin - Actualizar Estatus de Orden ' + req.params.id,
+                        currentUrl: '/usr/',
                         customer: req.user,
                         order: order[0],
                         products: products
@@ -377,6 +386,7 @@ router.route('/customers')
 
             var contextDict = {
                 title: 'Admin - Usuarios',
+                currentUrl: '/usr/',
                 customer: req.user,
                 customers: customers
             };

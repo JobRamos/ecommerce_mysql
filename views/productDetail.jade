@@ -87,9 +87,10 @@ block content
         function addToWishlist() {
             Swal.fire({
                 title:'Lista de deseos',
-                text: 'Has añadido este producto a tu Lista de deseos',
+                text: 'Has añadido este videojuego a tu Lista de deseos',
                 icon:'success',
                 customClass: 'swal-wide',
+                confirmButtonColor: '#7a54d7',
                 footer: '<a href="/wishlist">Ir a mi Lista de deseos</a>'
             }).then((result) => {
                 location.reload();
@@ -100,7 +101,8 @@ block content
         function removeFromWishlist() {
             Swal.fire({
                 title:'Lista de deseos',
-                text: 'Has eliminado este producto de tu Lista de deseos',
+                text: 'Has eliminado este videojuego de tu Lista de deseos',
+                confirmButtonColor: '#7a54d7',
                 icon:'error',
                 footer: '<a href="/wishlist">Ir a mi Lista de deseos</a>'
             }).then((result) => {
@@ -111,7 +113,8 @@ block content
         function addToCart() {
             Swal.fire({
                 title:'Carrito de compras',
-                text: 'Has añadido este producto a tu Carrito de compras',
+                text: 'Has añadido este videojuego a tu Carrito de compras',
+                confirmButtonColor: '#7a54d7',
                 icon:'success',
                 customClass: 'swal-wide',
                 footer: '<a href="/cart">Ir a mi Carrito de compras</a>'

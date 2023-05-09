@@ -3,7 +3,7 @@ extends admin
 block details
 
     .center-login
-        h1 Editar producto
+        h1 Editar videojuego
         form(id='editProduct', action='/admin/products/' + product.ProductID + '/edit', method='POST')
             .txt_field
                 input(type='text', id='name', name='name', value=product.ProductName, required=true)
@@ -42,13 +42,13 @@ block details
                     img.dev-img(src=product.Image, alt=product.ProductName, width='200px')
             .radio_field
                 span
-                label Mostrar producto como disponible
+                label Mostrar videojuego como disponible
                 
                 - var feature = true
                 if product.Feature == false
                     - feature = false 
 
-                label(for='featureYes') Yes
+                label(for='featureYes') Si
                 if feature
                     input(type='radio', id='featureYes', name='feature', value=1, checked)
                 else
@@ -63,7 +63,7 @@ block details
                 br
 
                 br
-            input(type='submit', value='Actualizar producto')
+            input(type='submit', value='Actualizar videojuego')
             br
             br
     br

@@ -3,7 +3,7 @@ extends ../layout
 block content
     section#cart_items
         .container
-            h2 Finalizar compra
+            h1 Finalizar compra
             .row
                 .col-sm-8
                     
@@ -11,7 +11,7 @@ block content
                             thead
                                 tr
                                     td.image
-                                    td.description Producto
+                                    td.description Videojuego
                                     td.price Precio Unitario
                                     td.quantity Cantidad
                                     td.total Total
@@ -42,7 +42,7 @@ block content
                                     tr
                                         td(colspan='4')
                                         td.cart_quantity
-                                            a.btn.btn-default.update(href='/cart') Editar Carrito
+                                            a.btn.btn-default.add-to-cart(href='/cart') Editar Carrito
                 .col-sm-4
                 
 
@@ -70,6 +70,6 @@ block content
                             td
                             td(colspan=2).text-right
                                 form(action='/create-checkout-session', method='POST')
-                                    button.btn.btn-default.check_out(type='submit') Confirmar Orden
+                                    button.btn.btn-default.add-to-cart(type='submit') Confirmar Orden
     // /#cart_items
 
