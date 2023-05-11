@@ -56,20 +56,20 @@ block content
                                 tbody
                                     tr
                                         td Sub Total
-                                        td(style='color: green;')= ' $' + summary.subTotal
+                                        td(style='color: #85BB65;')= ' $' + summary.subTotal
                                     tr
                                         td Descuento
                                         td(style='color: red;')= ' $' + summary.discount
                                     tr
                                         td Total
-                                        td(style='color: green;')
+                                        td(style='color: #85BB65;')
                                             span= ' $' + summary.total
 
-                    table.table
-                        tr
-                            td
-                            td(colspan=2).text-right
-                                form(action='/create-checkout-session', method='POST')
-                                    button.btn.btn-default.add-to-cart(type='submit') Confirmar Orden
-    // /#cart_items
+                                
+                                    tr
+                                        
+                                        td(colspan=2).text-right
+                                            form(action='/create-checkout-session', method='POST')
+                                                button.btn.btn-default.add-to-cart(type='submit') Confirmar Orden
+            
 

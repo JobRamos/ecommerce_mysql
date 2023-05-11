@@ -2,8 +2,9 @@ extends info
 
 block details
     
-    h2= 'Orden ' + order.OrderID + ' finalizada'
-    h4= 'Fecha de compra: ' + order.OrderDate
+    h1= 'Orden ' + order.OrderID + ' finalizada'
+    h4(id="fechaH4")= 'Fecha de compra: '
+    button(id="fechaButton" value=order.OrderDate, style="display: none;")
     .row
         .col-sm-8
             .table-responsive.cart_info
@@ -31,12 +32,12 @@ block details
                                     h4
                                         a(href=productLink)= name
                                     p= product.Description
-                                td(style='color: green;')
-                                    p= ' $' + unitPrice
+                                td
+                                    p(style='color: #85BB65;')= ' $' + unitPrice
                                 td.cart_quantity
                                     p=quantity
-                                td(style='color: green;')
-                                    p.cart_total_price= ' $' + productTotal
+                                td
+                                    p(style='color: #85BB65; font-weight: 1000;').cart_total_price= ' $' + productTotal
 
         .col-sm-4
             
@@ -51,20 +52,20 @@ block details
                     tbody
                         tr
                             td Sub Total
-                            td(style='color: green;')= ' $' + order.SubTotal
+                            td(style='color: #85BB65;')= ' $' + order.SubTotal
                         tr
                             td Descuento
                             td(style='color: red;')= ' $' + order.Discount
                         
                         tr
                             td Total
-                            td(style='color: green;')
+                            td(style='color: #85BB65; font-weight: 1000;')
                                 span= ' $' + order.Total
                 br
                 br
 
-            button.botonRegresar(onclick="ocultarCodigos()", id="ocultar", style="display: none;") Ocultar codigos
-            button.botonRegresar(onclick="mostrarCodigos()", id="mostrar") Mostrar codigos
+            button.add-to-cart(onclick="ocultarCodigos()", id="ocultar", style="display: none;") Ocultar codigos
+            button.add-to-cart(onclick="mostrarCodigos()", id="mostrar") Mostrar codigos
             br
 
             .table-responsive.cart_info
@@ -78,11 +79,27 @@ block details
                         each codigo in codigos
                             tr
                                 td=codigo.ProductName
-                                td(style='color: green;')=codigo.codigo
+                                td(style='color: #85BB65;')=codigo.codigo
+                br
+                br
+                br
+                br
+                br
+                br
+                br
+                br
                 br
                 br
 
     script(type='text/javascript').
+
+        var fechaInicial = new Date(document.getElementById("fechaButton").value);
+        var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        var fechaFinal = fechaInicial.toLocaleDateString('es-ES', options);
+        var tiempo = (fechaInicial.getHours()+1) + ":" + fechaInicial.getMinutes() + ":" + fechaInicial.getSeconds();
+
+        document.getElementById("fechaH4").textContent += fechaFinal + " a las " + tiempo;
+        //- alert(fechaFinal+tiempo);  
 
         function mostrarCodigos() {
             document.getElementById("tablaCodigos").style.display = "block";  

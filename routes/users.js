@@ -133,12 +133,11 @@ module.exports = function (app, passport) {
     app.get('/sign-up', function (req, res) {
         // render the page and pass in any flash data if it exists
         if (req.session.inCheckOut){
-            var checkOutNoti = 'You need to sign in to check out!\
-                Please sign up if you do not have one!';
+            var checkOutNoti = 'Necesitas ingresar a Iocus para poder realizar esta operación';
             req.session.inCheckOut = false;
         }
         var contextDict = {
-            title: 'Sign Up',
+            title: 'Regístrate en Iocus',
             signUpError: req.flash('signUpError'),
             checkOutNoti: checkOutNoti
         };

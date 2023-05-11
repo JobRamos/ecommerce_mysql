@@ -49,7 +49,7 @@ block content
                                 form(action='/cart/' + id + '/update', method='POST')
                                     //- onchange="this.form.submit()",
                                     input.cart_quantity_input(type='number', name=id, value=quantity, autocomplete='off', size='2', min="1", max=item.UnitsInStock)
-                        td(style='color: green;').cart_total
+                        td(style='color: #85BB65;').cart_total
                             p.cart_total_price= ' $' + productTotal
                         td.cart_delete
                             form(action='/cart/' + id + '/delete', method='POST')
@@ -76,10 +76,10 @@ block content
                                     tbody
                                         tr
                                             td Sub Total
-                                            td= ' $' + summary.subTotal
+                                            td(style='color: #85BB65;')= ' $' + summary.subTotal
                                         tr
                                             td Descuento
-                                            td= ' $' + summary.discount
+                                            td(style='color: red;')= ' $' + summary.discount
                                         tr
                                             td Total
                                             td

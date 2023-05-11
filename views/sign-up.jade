@@ -79,7 +79,7 @@ block content
 
             var paragraph = document.getElementById("errorNombre");
             paragraph.style.display = "none";
-            if(fullName == "" || fullName.length < 8 || fullName.length > 30 || !fullName.match(/^[a-zA-Z][a-zA-Z\\s]+$/)){
+            if(fullName == "" || fullName.length < 8 || fullName.length > 30 || !fullName.match(/^([A-Za-zÑñÁáÉéÍíÓóÚú]+['\-]{0,1}[A-Za-zÑñÁáÉéÍíÓóÚú]+)(\s+([A-Za-zÑñÁáÉéÍíÓóÚú]+['\-]{0,1}[A-Za-zÑñÁáÉéÍíÓóÚú]+))*$/)){
                 paragraph.textContent = "*La longitud del nombre debe de ser de entre al menos 8 y 30 caracteres y debe de contener unicamente letras";
                 paragraph.style.display = "block"; 
                 aprobado = 0;

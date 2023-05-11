@@ -89,9 +89,6 @@ router.route('/:username/edit')
                 }
             });
 
-            
-
-            
         }else{
             res.render('profile/editProfile', {
                 title: req.user.FullName,
