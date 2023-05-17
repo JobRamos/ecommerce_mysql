@@ -167,6 +167,7 @@ router.route('/cat/:catSlug/:prodSlug/:prodID')
 
                 var contextDict = {
                     title: product[0].ProductName,
+                    currentUrl: '/cat/all',
                     product: product[0],
                     WhislistCount: WhislistCount[0],
                     customer: req.user

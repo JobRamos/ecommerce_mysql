@@ -94,9 +94,8 @@ router.route('/:username/edit')
                 title: req.user.FullName,
                 currentUrl: '/usr/',
                 customer: req.user,
-                signUpError: 'Las contraseña ingresada no coincide. Por favor ingresa una contraseña válida.'
+                signUpError: 'La contraseña ingresada es incorrecta. Por favor ingresa una contraseña válida.'
             });
-
         }
         
         
@@ -126,13 +125,23 @@ router.route('/:username/change-password')
                     res.redirect('/usr/' + req.user.Username);
 
                 });
-            }
-            else {
+            } else {
                 //password wrong
+                res.render('profile/changePassword', {
+                    title: req.user.FullName,
+                    currentUrl: '/usr/',
+                    customer: req.user,
+                    signUpError: 'La contraseña ingresada es incorrecta. Por favor ingresa una contraseña válida.'
+                });
             }
-        }
-        else {
+        } else {
             //passwords are not matched
+            res.render('profile/changePassword', {
+                title: req.user.FullName,
+                currentUrl: '/usr/',
+                customer: req.user,
+                signUpError: 'Las nuevas contraseñas ingresadas no coinciden. Por favor ingresa un par de contraseñas válidas.'
+            });
         }
     });
 

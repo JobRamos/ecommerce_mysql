@@ -1,13 +1,35 @@
 extends info
 
 block details
-    
-    h1= 'Orden ' + order.OrderID + ' finalizada'
-    h4(id="fechaH4")= 'Fecha de compra: '
-    button(id="fechaButton" value=order.OrderDate, style="display: none;")
     .row
-        .col-sm-8
+        .col-sm-12
+
+            
             .table-responsive.cart_info
+                
+
+                table.content-table
+                    thead
+                        tr
+                            td(colspan=6, style='text-align: center; align-items: center;')
+                                h1= 'Orden ' + order.OrderID + ' finalizada'
+                                h4(id="fechaH4")= 'Fecha de compra: '
+                                button(id="fechaButton" value=order.OrderDate, style="display: none;")
+
+                    tbody
+                        tr
+                            td Sub Total
+                            td(style='color: #85BB65;')= ' $' + order.SubTotal
+                        tr
+                            td Descuento
+                            td(style='color: red;')= ' $' + order.Discount
+                        
+                        tr
+                            td Total
+                            td(style='color: #85BB65; font-weight: 1000;')
+                                span= ' $' + order.Total
+                br
+
                 table.content-table
                     thead
                         tr
@@ -38,48 +60,30 @@ block details
                                     p=quantity
                                 td
                                     p(style='color: #85BB65; font-weight: 1000;').cart_total_price= ' $' + productTotal
-
-        .col-sm-4
+                        tr
+                            td(colspan=6)
+                                button.add-to-cart(onclick="ocultarCodigos()", id="ocultar", style="display: none; float: right;") Ocultar codigos
+                                button.add-to-cart(onclick="mostrarCodigos()", id="mostrar", style='float: right;') Mostrar codigos
             
 
-            .table-responsive.cart_info
-
-                table.content-table
-                    thead
-                        tr.cart_menu
-                            td(colspan=2) Resumen de compra
-
-                    tbody
-                        tr
-                            td Sub Total
-                            td(style='color: #85BB65;')= ' $' + order.SubTotal
-                        tr
-                            td Descuento
-                            td(style='color: red;')= ' $' + order.Discount
-                        
-                        tr
-                            td Total
-                            td(style='color: #85BB65; font-weight: 1000;')
-                                span= ' $' + order.Total
-                br
-                br
-
-            button.add-to-cart(onclick="ocultarCodigos()", id="ocultar", style="display: none;") Ocultar codigos
-            button.add-to-cart(onclick="mostrarCodigos()", id="mostrar") Mostrar codigos
-            br
-
-            .table-responsive.cart_info
-
-                table(id="tablaCodigos", style="display: none; width: 10px;").content-table
+                table(id="tablaCodigos", style="display: none; width: 100%;").content-table
                     thead
                         tr
-                            td(colspan=2) Códigos
+                            td(colspan=6, style='text-align: center;') Códigos
 
                     tbody
                         each codigo in codigos
                             tr
                                 td=codigo.ProductName
                                 td(style='color: #85BB65;')=codigo.codigo
+
+
+
+            
+                br
+
+            
+  
                 br
                 br
                 br
