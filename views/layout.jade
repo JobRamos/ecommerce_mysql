@@ -224,13 +224,64 @@ html
         
         });
 
+        //- function createMessageElement(text, sender) {
+        //- const messageElement = document.createElement('div');
+        //- messageElement.textContent = text;
+        //- messageElement.classList.add(sender === 'user' ? 'userMessage' : 'assistantMessage');
+        //- return messageElement;
+        //- }
+
+
         function createMessageElement(text, sender) {
         const messageElement = document.createElement('div');
-        messageElement.textContent = text;
         messageElement.classList.add(sender === 'user' ? 'userMessage' : 'assistantMessage');
+
+        // Buscar enlaces dentro del texto
+        const regex = /(\bhttps?:\/\/\S+\b)/gi;
+        const matches = text.match(regex);
+
+        if (matches) {
+            // Dividir el texto en partes: texto regular y enlaces
+            const parts = text.split(regex);
+
+            parts.forEach((part) => {
+            if (part.match(regex)) {
+                // Es un enlace, envolverlo en un <span> con margen inferior
+                const linkSpan = document.createElement('span');
+                linkSpan.style.marginBottom = '10px';
+
+                const link = document.createElement('a');
+                link.href = part;
+                link.textContent = part;
+                linkSpan.appendChild(link);
+
+                messageElement.appendChild(linkSpan);
+            } else {
+                // Es texto regular, agregarlo directamente al mensaje
+                const textNode = document.createTextNode(part);
+                messageElement.appendChild(textNode);
+            }
+            });
+        } else {
+            // No hay enlaces, agregar el texto completo al mensaje
+            messageElement.textContent = text;
+        }
+
         return messageElement;
         }
+
+
+        messageContainer.addEventListener('click', (event) => {
+        const target = event.target;
+        if (target.tagName === 'A') {
+            event.preventDefault();
+            window.open(target.href, '_self');
+        }
+        });
+
 
         chatToggle.addEventListener('click', () => {
         chatContainer.style.display = chatContainer.style.display === 'none' ? 'flex' : 'none';
         });
+
+

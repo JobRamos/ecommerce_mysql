@@ -137,7 +137,7 @@ var mysql = require('mysql');
 
 const configuration = new Configuration({
     organization: "org-xg1qINhaoUIPfutV0HqSH1wh",
-    apiKey: "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"
+    apiKey: "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"
 });
 
 const openai = new OpenAIApi(configuration);
@@ -156,7 +156,16 @@ app.get("/", (req, res) => {
 app.post("/process", async (req, res) => {
 
     const text = req.body.text.toLowerCase();
+    let idUser = null;
     let registrado = true;
+
+    if (req.isAuthenticated()) { 
+      idUser = req.user.UserID;
+            
+    } else {
+      registrado = false;
+    }
+    
 
 
     const principalRoleAsistant = "Eres un asistente virtual de la página web de Iocus, la cual vende videojuegos en línea. Estás encargado de brindarle atención al usuario con funcionalidades de la página como registrarse, consultar videojuegos o su lista de deseos. Responderás únicamente con la siguiente información y si el usuario te hace una pregunta que no entra dentro del contexto de la información le dirás que estás diseñado para apoyarle únicamente con las funcionalidades que ya te mencioné. Esta es la información y responderás con un máximo de 30 palabras: "
@@ -164,7 +173,7 @@ app.post("/process", async (req, res) => {
     if (registrado && (text.includes("wishlist") || text.includes("lista de deseos"))){
 
       const queryWhislist = 'SELECT p.* FROM products p INNER JOIN wishlist w '
-      + 'ON p.ProductID = w.IDvideojuego WHERE w.IDUsuario = 4';
+      + 'ON p.ProductID = w.IDvideojuego WHERE w.IDUsuario = ' + idUser;
       // const infoWishlist = await getInfoDataBase("Wishlist del usuario", queryWhislist);
 
       RunQuery(queryWhislist, async function (infoWishlist) {
@@ -183,9 +192,6 @@ app.post("/process", async (req, res) => {
 
       });
 
-      
-
-
     }else if(!registrado && (text.includes("wishlist") || text.includes("lista de deseos"))){
 
       const roleAsistant = "Eres un asistente virtual de la página web de Iocus, la cual vende videojuegos en línea."
@@ -194,23 +200,16 @@ app.post("/process", async (req, res) => {
 
       const resultChat = await callChatGPT(roleAsistant, text);
       res.json({result: resultChat});
+      
+    }else if(text.includes("carrito") || text.includes("carro")){
 
-
-    }else if ((text.includes("registro") || text.includes("registrarme"))) {
-
-      const infoSignUp = "Si un usuario se quiere registar mandale este link: http://localhost:3000";
-      const roleAsistant = principalRoleAsistant + infoSignUp;
-
-      console.log(roleAsistant.length);
+      const roleAsistant = "Eres un asistente virtual de la página web de Iocus, la cual vende videojuegos en línea."
+      + " Responderás con un máximo de 30 palabras, y le indicarás al usuario que para consultar su carrito de compras tiene que entrar al siguiente link: http://localhost:3000/cart";
 
       const resultChat = await callChatGPT(roleAsistant, text);
-      console.log("respuesta" + resultChat);
       res.json({result: resultChat});
       
-    } else {
-
-      const queryVideojuegos = "SELECT c.CategoryName, p.ProductName, p.ProductPrice, p.UnitsInStock, p.Description, p.ManufactureYear"
-      + " FROM categories c JOIN products p ON c.CategoryID = p.CategoryID";
+    }else if(text.includes("mas deseados") || text.includes("más deseados")){
 
       const queryMasDeseados = 'SELECT p.* '
       + 'FROM products p ' 
@@ -221,29 +220,46 @@ app.post("/process", async (req, res) => {
       + '    ORDER BY veces_deseado DESC'
       + '    LIMIT 10'
       + ') w ON p.ProductID = w.IDvideojuego';
+
+      const roleAsistant = "Eres un asistente virtual de la página web de Iocus, la cual vende videojuegos en línea."
+      + " Responderás con un máximo de 30 palabras, y le indicarás al usuario que estos son los videojuegos más deseados ya que no hay una sección especial que brinde esa información dentro de la página: ";
+      
+      RunQuery(queryMasDeseados, async function (infoMasDeseados) {
+        const masDeseados = roleAsistant + "\n" + "Videojuegos más deseados: " + JSON.stringify(infoMasDeseados);
+
+        const resultChat = await callChatGPT(masDeseados, text);
+        res.json({result: resultChat});
+
+        });
+      
+    }else {
+
+      const queryVideojuegos = "SELECT c.CategoryName, p.ProductName, p.ProductPrice, p.UnitsInStock, p.Description, p.ManufactureYear"
+      + " FROM categories c JOIN products p ON c.CategoryID = p.CategoryID";
     
       // const infoVideoJuegos = await getInfoDataBase("Videojuegos con categorías", queryVideojuegos);
       RunQuery(queryVideojuegos, async function (infoVideoJuegos) {
 
-        RunQuery(queryMasDeseados, async function (infoMasDeseados) {
+        // const infoMasDeseados = await getInfoDataBase("Videojuegos más deseados", queryMasDeseados);
 
-          // const infoMasDeseados = await getInfoDataBase("Videojuegos más deseados", queryMasDeseados);
+        // console.log("infoVideoJuegos");
+        // console.log(JSON.stringify(infoVideoJuegos));
+        // console.log(JSON.stringify(infoMasDeseados));
 
-          // console.log("infoVideoJuegos");
-          // console.log(JSON.stringify(infoVideoJuegos));
-          // console.log(JSON.stringify(infoMasDeseados));
+        const infoRegistroCuenta = "Si un usuario se quiere registar o crear una cuenta mandale este link: http://localhost:3000/sign-up, e indicale que va a necesitar proporcionar un nombre completo, un usuario, una contraseña válida, un correo válido y un número de celular ";
+        const infoSignUp = "Si un usuario quiere iniciar sesión mandale este link: http://localhost:3000/sign-in";
+        
+        const roleAsistant = principalRoleAsistant + JSON.stringify(infoVideoJuegos) + "\n" + infoRegistroCuenta + "\n" + infoSignUp;
 
-          const roleAsistant = principalRoleAsistant + JSON.stringify(infoVideoJuegos) + "\n" + JSON.stringify(infoMasDeseados);
-          
-          console.log("roleAsistant");
-          console.log(roleAsistant.length);
-          console.log(roleAsistant);
+        // console.log("roleAsistant");
+        console.log(roleAsistant.length);
+        // console.log(roleAsistant);
 
-          var resultChat = await callChatGPT(roleAsistant, text);
-          console.log("respuesta" + JSON.stringify(resultChat));
+        var resultChat = await callChatGPT(roleAsistant, text);
+        console.log("respuesta" + JSON.stringify(resultChat));
 
-          res.json({result: resultChat});
-        });
+        res.json({result: resultChat});
+        
       
       });
       
@@ -269,7 +285,9 @@ async function callChatGPT(role, prompt){
 
     } catch (e){
         console.log(e);
-        throw e;
+        // throw e;
+        var answerGPT = "¡Ups!, hay una alta demanda de mi servicio, por favor espera 30 segundos antes de volver a preguntarme, esto es debido a que nuestra página sigue en desarrollo de un mejor servicio, disculpa las molestias";
+        return answerGPT;
     }
 }
 
