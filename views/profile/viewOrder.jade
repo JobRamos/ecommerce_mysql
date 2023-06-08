@@ -11,28 +11,6 @@ block details
                 table.content-table
                     thead
                         tr
-                            td(colspan=6, style='text-align: center; align-items: center;')
-                                h1= 'Orden ' + order.OrderID + ' finalizada'
-                                h4(id="fechaH4")= 'Fecha de compra: '
-                                button(id="fechaButton" value=order.OrderDate, style="display: none;")
-
-                    tbody
-                        tr
-                            td Sub Total
-                            td(style='color: #85BB65;')= ' $' + order.SubTotal
-                        tr
-                            td Descuento
-                            td(style='color: red;')= ' $' + order.Discount
-                        
-                        tr
-                            td Total
-                            td(style='color: #85BB65; font-weight: 1000;')
-                                span= ' $' + order.Total
-                br
-
-                table.content-table
-                    thead
-                        tr
                             td(style='max-width: 120px;').image Imagen
                             td videojuego
                             td Precio Unitario 
@@ -60,22 +38,47 @@ block details
                                     p=quantity
                                 td
                                     p(style='color: #85BB65; font-weight: 1000;').cart_total_price= ' $' + productTotal
+                        
+                        tr
+                            td(colspan='3')
+                            td(colspan='2')
+                                table.content-table
+                                    thead
+                                        tr.cart_menu
+                                            td(colspan=2) Resumen de compra
+
+                                    tbody
+                                        tr
+                                            td Sub Total
+                                            td(style='color: #85BB65;')= ' $' + order.SubTotal
+                                        tr
+                                            td Descuento
+                                            td(style='color: red;')= ' $' + order.Discount
+                                        tr
+                                            td Total
+                                            td(style='color: #85BB65;')
+                                                span= ' $' + order.Total
+
                         tr
                             td(colspan=6)
                                 button.add-to-cart(onclick="ocultarCodigos()", id="ocultar", style="display: none; float: right;") Ocultar codigos
                                 button.add-to-cart(onclick="mostrarCodigos()", id="mostrar", style='float: right;') Mostrar codigos
+
+                        tr
+                            td(colspan='3')
+                            td(colspan='2')
             
 
-                table(id="tablaCodigos", style="display: none; width: 100%;").content-table
-                    thead
-                        tr
-                            td(colspan=6, style='text-align: center;') Códigos
+                                table(id="tablaCodigos", style="display: none; width: 100%;").content-table
+                                    thead
+                                        tr
+                                            td(colspan=6, style='text-align: center;') Códigos
 
-                    tbody
-                        each codigo in codigos
-                            tr
-                                td=codigo.ProductName
-                                td(style='color: #85BB65;')=codigo.codigo
+                                    tbody
+                                        each codigo in codigos
+                                            tr
+                                                td=codigo.ProductName
+                                                td(style='color: #85BB65;')=codigo.codigo
 
 
 

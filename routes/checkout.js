@@ -190,16 +190,16 @@ router.route('/order').get(function (req, res, next) {
                     req.session.cartSummary = {};
                     req.session.showCart = {};
 
-                    // //get order info
-                    // var contextDict = {
-                    //     title: 'Orden ' + rows.insertId,
-                    //     customer: req.user,
-                    //     order: order[0],
-                    //     products: products
-                    // };                    
+                    //get order info
+                    var contextDict = {
+                        title: 'Orden ' + rows.insertId,
+                        customer: req.user,
+                        order: order[0],
+                        products: products
+                    };                    
 
-                    // res.render('checkout/confirm', contextDict);
-                    res.redirect('/usr/'+ req.user.Username+'/orders/'+rows.insertId)
+                    res.render('checkout/confirm', contextDict);
+                    // res.redirect('/usr/'+ req.user.Username+'/orders/'+rows.insertId)
 
                     
                 });

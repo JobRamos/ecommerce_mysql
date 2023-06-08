@@ -18,9 +18,91 @@
     --medium-purple: #9676de;
     }
 
-/* .swal-wide{
-        width:850px !important;
-} */
+/* chatbot  */
+
+#chatContainer {
+    border: 2px solid #7a54d7;
+    position: fixed;
+    bottom: 50px;
+    right: 20px;
+    width: 400px;
+    height: 50vh;
+    max-height: 500px;
+    background-color: black;
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    overflow-y: auto;
+    display: none; /* Ocultar inicialmente el cuadro de chat */
+    flex-direction: column;
+  }
+
+  #messageContainer {
+    flex-grow: 1;
+    margin-bottom: 10px;
+    
+  }
+
+  .userMessage {
+    text-align: right;
+    background-color: #dc54a4;
+    border-radius: 5px;
+    padding: 5px 10px;
+    margin-bottom: 5px;
+    word-wrap: break-word; /* Añadir esta propiedad */
+  }
+
+  .assistantMessage {
+    text-align: left;
+    background-color: #7a54d7;
+    border-radius: 5px;
+    padding: 5px 10px;
+    margin-bottom: 5px;
+    word-wrap: break-word; /* Añadir esta propiedad */
+  }
+
+  #myForm {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 10px; /* Añadir margen superior */
+  }
+
+  #textInput {
+      flex-grow: 1;
+      margin-right: 10px;
+      border-radius: 100px;
+      border:2px solid #7a54d7;
+      max-width: 320px; /* Ajustar el ancho máximo del cuadro de texto */
+      min-height: 50px; /* Ajustar el ancho máximo del cuadro de texto */
+  }
+
+  #sendButton {
+      max-width: 80px; /* Ajustar el ancho máximo del botón "Enviar" */
+      margin-left: 0; /* Eliminar el margen izquierdo */
+      margin-right: 43px; /* Ajustar el margen derecho */
+  }
+
+  #chatToggle {
+    position: fixed; 
+    bottom: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    background-color: #dc54a4;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-size: 20px;
+    cursor: pointer;
+    z-index: 1; 
+  }
+
+
+
+/* diseno pagina */
 
 .botonRegresar {
         background-color: #7a54d7;

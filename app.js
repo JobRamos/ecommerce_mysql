@@ -128,6 +128,183 @@ app.use('/contact-us', contact);
 app.use('/admin', admin);
 app.use('/usr', profile);
 
+
+// chatbot
+const { Configuration, OpenAIApi } = require("openai");
+// import bodyParser from "body-parser";
+// import cors from "cors";
+var mysql = require('mysql');
+
+const configuration = new Configuration({
+    organization: "org-xg1qINhaoUIPfutV0HqSH1wh",
+    apiKey: "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"
+});
+
+const openai = new OpenAIApi(configuration);
+
+// const app = express();
+// const port = 4000;
+
+app.use(bodyParser.json());
+// app.use(cors());
+
+app.get("/", (req, res) => {
+    res.sendFile('C:/Users/j50022283/Desktop/chatbotGPT/public/index.html');
+  });
+  
+
+app.post("/process", async (req, res) => {
+
+    const text = req.body.text.toLowerCase();
+    let registrado = true;
+
+
+    const principalRoleAsistant = "Eres un asistente virtual de la página web de Iocus, la cual vende videojuegos en línea. Estás encargado de brindarle atención al usuario con funcionalidades de la página como registrarse, consultar videojuegos o su lista de deseos. Responderás únicamente con la siguiente información y si el usuario te hace una pregunta que no entra dentro del contexto de la información le dirás que estás diseñado para apoyarle únicamente con las funcionalidades que ya te mencioné. Esta es la información y responderás con un máximo de 30 palabras: "
+
+    if (registrado && (text.includes("wishlist") || text.includes("lista de deseos"))){
+
+      const queryWhislist = 'SELECT p.* FROM products p INNER JOIN wishlist w '
+      + 'ON p.ProductID = w.IDvideojuego WHERE w.IDUsuario = 4';
+      // const infoWishlist = await getInfoDataBase("Wishlist del usuario", queryWhislist);
+
+      RunQuery(queryWhislist, async function (infoWishlist) {
+
+        // console.log("infoWishlist");
+        // console.log(JSON.stringify(infoWishlist));
+        
+        const roleAsistant = principalRoleAsistant + JSON.stringify(infoWishlist);
+
+        console.log("roleAsistant");
+        console.log(roleAsistant.length);
+        console.log(roleAsistant);
+
+        const resultChat = await callChatGPT(roleAsistant, text);
+        res.json({result: resultChat});
+
+      });
+
+      
+
+
+    }else if(!registrado && (text.includes("wishlist") || text.includes("lista de deseos"))){
+
+      const roleAsistant = "Eres un asistente virtual de la página web de Iocus, la cual vende videojuegos en línea."
+      + " Responderás con un máximo de 30 palabras, y le indicarás al usuario que no puede consultar su whislist sin antes ingresar a una"
+      + " cuenta valida dentro de Iocus y lo invitarás a crear una cuenta o registrarse";
+
+      const resultChat = await callChatGPT(roleAsistant, text);
+      res.json({result: resultChat});
+
+
+    }else if ((text.includes("registro") || text.includes("registrarme"))) {
+
+      const infoSignUp = "Si un usuario se quiere registar mandale este link: http://localhost:3000";
+      const roleAsistant = principalRoleAsistant + infoSignUp;
+
+      console.log(roleAsistant.length);
+
+      const resultChat = await callChatGPT(roleAsistant, text);
+      console.log("respuesta" + resultChat);
+      res.json({result: resultChat});
+      
+    } else {
+
+      const queryVideojuegos = "SELECT c.CategoryName, p.ProductName, p.ProductPrice, p.UnitsInStock, p.Description, p.ManufactureYear"
+      + " FROM categories c JOIN products p ON c.CategoryID = p.CategoryID";
+
+      const queryMasDeseados = 'SELECT p.* '
+      + 'FROM products p ' 
+      + 'INNER JOIN ('
+      + '    SELECT IDvideojuego, COUNT(IDvideojuego) AS veces_deseado'
+      + '    FROM wishlist'
+      + '    GROUP BY IDvideojuego'
+      + '    ORDER BY veces_deseado DESC'
+      + '    LIMIT 10'
+      + ') w ON p.ProductID = w.IDvideojuego';
+    
+      // const infoVideoJuegos = await getInfoDataBase("Videojuegos con categorías", queryVideojuegos);
+      RunQuery(queryVideojuegos, async function (infoVideoJuegos) {
+
+        RunQuery(queryMasDeseados, async function (infoMasDeseados) {
+
+          // const infoMasDeseados = await getInfoDataBase("Videojuegos más deseados", queryMasDeseados);
+
+          // console.log("infoVideoJuegos");
+          // console.log(JSON.stringify(infoVideoJuegos));
+          // console.log(JSON.stringify(infoMasDeseados));
+
+          const roleAsistant = principalRoleAsistant + JSON.stringify(infoVideoJuegos) + "\n" + JSON.stringify(infoMasDeseados);
+          
+          console.log("roleAsistant");
+          console.log(roleAsistant.length);
+          console.log(roleAsistant);
+
+          var resultChat = await callChatGPT(roleAsistant, text);
+          console.log("respuesta" + JSON.stringify(resultChat));
+
+          res.json({result: resultChat});
+        });
+      
+      });
+      
+      
+    }
+});
+
+
+async function callChatGPT(role, prompt){
+    try{
+        const completion = await openai.createChatCompletion({
+            model: "gpt-3.5-turbo", 
+            messages: [
+                {role: "system", content: role},
+                {role: "user", content: `${prompt}`}
+            ],
+            max_tokens: 200
+        })
+
+        // console.log("chat gpt" + completion.data.choices[0].message.content);
+        var answerGPT = completion.data.choices[0].message.content;
+        return answerGPT;
+
+    } catch (e){
+        console.log(e);
+        throw e;
+    }
+}
+
+
+// async function getInfoDataBase(tableName, query){
+
+//   const connection = await mysql.createConnection({
+//     host: 'localhost',
+//     user: 'root',
+//     password: 'Harveylinux77+',
+//     database: 'astore'
+//   });
+
+//   try {
+
+//     const [table] = await connection.query(query);
+//     const infoFormateada = tableName + `: ` + `${JSON.stringify(table)}`;
+//     return infoFormateada;
+
+//   } catch (error) {
+//     console.log(error);
+//     throw error;
+
+//   } finally {
+//     connection.end();
+//   }
+
+// }
+
+
+
+
+
+
+
 // Session-persisted message middleware
 app.use(function(req, res, next){
     var err = req.session.error,

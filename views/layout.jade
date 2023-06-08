@@ -77,23 +77,19 @@ html
 
                 .header-right
 
-                    
-
-                    
-
-                    
                     a(class={active: currentUrl === '/'}, href='/') 
                         i.fa.fa-home
                         |      Inicio
                     a(class={active: currentUrl === '/cat/all'}, href='/cat/all') 
                         i.fa.fa-gamepad
                         |      Videojuegos
-                    a(class={active: currentUrl === '/cart'}, href='/cart')
-                        i.fa.fa-shopping-cart
-                        |       Carrito
-                    a(class={active: currentUrl === '/wishlist'}, href='/wishlist')
-                        i.fa.fa-heart
-                        |       Lista de Deseos
+                    if (customer && customer.Admin != 1) || !customer
+                        a(class={active: currentUrl === '/cart'}, href='/cart')
+                            i.fa.fa-shopping-cart
+                            |       Carrito
+                        a(class={active: currentUrl === '/wishlist'}, href='/wishlist')
+                            i.fa.fa-heart
+                            |       Lista de Deseos
                     -var orderCus = '             Iniciar Sesión'
                     -var link = '/sign-in'
                     if customer
@@ -116,6 +112,16 @@ html
         
 
         block content
+
+
+        #chatContainer
+            #messageContainer
+            form#myForm
+                input#textInput(type='text', name='textInput')
+                button.add-to-cart(type='submit') 
+                          i.fa.fa-arrow-right
+        #chatToggle 
+            i.fa.fa-comment
 
         //Footer
         footer#footer
@@ -168,9 +174,63 @@ html
                     .row
                         p.pull-left &copy 2023 Iocus Website. Todos los Derechos Reservados.
         ///Footer
-        script(src='https://js.stripe.com/v3/')
-        script(src='/js/jquery-2.1.4.min.js')
-        script(src='/js/bootstrap.min.js')
-        script(src='/js/jquery.scrollUp.min.js')
-        script(src='/js/main.js')
-        script(src="https://cdn.jsdelivr.net/npm/sweetalert2@9")
+    script(src='https://js.stripe.com/v3/')
+    script(src='/js/jquery-2.1.4.min.js')
+    script(src='/js/bootstrap.min.js')
+    script(src='/js/jquery.scrollUp.min.js')
+    script(src='/js/main.js')
+    script(src="https://cdn.jsdelivr.net/npm/sweetalert2@9")
+    script(type='text/javascript').
+        const form = document.getElementById('myForm');
+        const messageContainer = document.getElementById('messageContainer');
+        const chatContainer = document.getElementById('chatContainer');
+        const chatToggle = document.getElementById('chatToggle');
+
+        const bienvenida = "¡Hola! soy el asistente virtual de Iocus y estoy aquí para apoyarte en tu recorrido dentro"
+        + " de nuestra página, puedes preguntarme cualquier cosa relacionada con la página y con gusto te responderé con "
+        + "la información existente";
+
+        const assistantMessage = createMessageElement(bienvenida, 'assistant');
+        messageContainer.appendChild(assistantMessage);
+
+        form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const formData = new FormData(form);
+        const text = formData.get('textInput');
+
+        const userMessage = createMessageElement(text, 'user');
+        messageContainer.appendChild(userMessage);
+        // Limpiar campo de texto después de enviar el mensaje
+        form.reset();
+
+        const response = await fetch('/process', {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ text })
+        });
+
+        const data = await response.json();
+
+        const assistantMessage = createMessageElement(data.result, 'assistant');
+        messageContainer.appendChild(assistantMessage);
+
+        // Scroll automático hacia el último mensaje
+        userMessage.scrollIntoView({ behavior: 'smooth' });
+        assistantMessage.scrollIntoView({ behavior: 'smooth' });
+
+        
+        });
+
+        function createMessageElement(text, sender) {
+        const messageElement = document.createElement('div');
+        messageElement.textContent = text;
+        messageElement.classList.add(sender === 'user' ? 'userMessage' : 'assistantMessage');
+        return messageElement;
+        }
+
+        chatToggle.addEventListener('click', () => {
+        chatContainer.style.display = chatContainer.style.display === 'none' ? 'flex' : 'none';
+        });
