@@ -10,8 +10,15 @@ var bcrypt = require('bcrypt-nodejs');
 var database = require('../config/database');
 var RunQuery = database.RunQuery;
 
-// email module
+// email sender module
 var nodemailer = require('nodemailer');
+
+// email validator module
+const emailValidator = require('deep-email-validator');
+
+async function isEmailValid(email) {
+  return emailValidator.validate(email)
+}
 
 
 
@@ -72,7 +79,7 @@ module.exports = function (passport) {
             passwordField: 'password',
             passReqToCallback: true // allows us to pass back the entire request to the callback
         },
-        function (req, username, password, done) {
+        async function (req, username, password, done) {
             // find a user whose email is the same as the forms email
             // we are checking to see if the user trying to login already exists
             var email = req.body.email;
@@ -83,6 +90,19 @@ module.exports = function (passport) {
             }
             else {
 
+                const {valid, reason, validators} = await isEmailValid(email);
+                
+                console.log(valid);
+                console.log(reason);
+                console.log(validators);
+                if (valid == true){
+                    console.log("valid mail OK");
+                }else{
+                    console.log("not valid mail NOT");   
+                }
+
+                
+
                 var selectQuery = 'SELECT * FROM users\
                     WHERE email = \'' + email + '\'';
                 RunQuery(selectQuery, function (emailRows) {
@@ -91,71 +111,60 @@ module.exports = function (passport) {
                     }
                     else {
 
-                        var selectQuery = 'SELECT * FROM users WHERE Phone = \'' + phone + '\'';
-                        RunQuery(selectQuery, function (phoneRows) {
-                            if (phoneRows.length > 0) {
-                                return done(null, false, req.flash('signUpError', 'El celular ingresado ya ha sido registrado previamente en Iocus. Por favor ingresa otro celular.'));
+                        selectQuery = 'SELECT * FROM users\
+                        WHERE username = \'' + username + '\'';
+                        RunQuery(selectQuery, function (usernameRows) {
+                            if (usernameRows.length > 0) {
+                                return done(null, false, req.flash('signUpError', 'El usuario ingresado ya ha sido registrado previamente en Iocus. Por favor ingresa otro nombre de usuario.'));
                             }
                             else {
+                                // if there is no user with that user and email
+                                var fullName = req.body.fullName;
+                                var passwordHash = bcrypt.hashSync(password, null, null);
 
-                        
+                                var insertQuery = 'INSERT INTO Users\
+                                    VALUES(null,\
+                                    \'' + fullName + '\', \
+                                    \'' + phone + '\', \
+                                    \'' + email + '\', \
+                                    \'' + username + '\', \
+                                    \'' + passwordHash + '\', 0)';
 
-                                selectQuery = 'SELECT * FROM users\
-                                WHERE username = \'' + username + '\'';
-                                RunQuery(selectQuery, function (usernameRows) {
-                                    if (usernameRows.length > 0) {
-                                        return done(null, false, req.flash('signUpError', 'El usuario ingresado ya ha sido registrado previamente en Iocus. Por favor ingresa otro nombre de usuario.'));
+                                RunQuery(insertQuery, function (insertResult) {
+                                    
+                                    //send mail process
+                                    var transporter = nodemailer.createTransport({
+                                    service: 'hotmail',
+                                    auth: {
+                                        user: 'iocus_2023@outlook.com',
+                                        pass: 'Magenta77'
                                     }
-                                    else {
-                                        // if there is no user with that user and email
-                                        var fullName = req.body.fullName;
-                                        var passwordHash = bcrypt.hashSync(password, null, null);
+                                    });
 
-                                        var insertQuery = 'INSERT INTO Users\
-                                            VALUES(null,\
-                                            \'' + fullName + '\', \
-                                            \'' + phone + '\', \
-                                            \'' + email + '\', \
-                                            \'' + username + '\', \
-                                            \'' + passwordHash + '\', 0)';
+                                    var mailOptions = {
+                                    from: 'iocus_2023@outlook.com',
+                                    to: email,
+                                    subject: 'Bienvenido a Iocus',
+                                    text: 'Hola '+ fullName+', gracias por registrate en Iocus'
+                                    };
 
-                                        RunQuery(insertQuery, function (insertResult) {
-                                            
-                                            //send mail process
-                                            var transporter = nodemailer.createTransport({
-                                            service: 'hotmail',
-                                            auth: {
-                                                user: 'iocus_2023@outlook.com',
-                                                pass: 'Magenta77'
-                                            }
-                                            });
-
-                                            var mailOptions = {
-                                            from: 'iocus_2023@outlook.com',
-                                            to: email,
-                                            subject: 'Bienvenido a Iocus',
-                                            text: 'Hola '+ fullName+', gracias por registrate en Iocus'
-                                            };
-
-                                            transporter.sendMail(mailOptions, function(error, info){
-                                            if (error) {
-                                                console.log(error);
-                                            } else {
-                                                console.log('Email sent: ' + info.response);
-                                            }
-                                            });
-                                            
-                                            // finsih singup
-                                            var user = {
-                                                UserID: insertResult.insertId
-                                            };
-                                            return done(null, user);
-                                        });
+                                    transporter.sendMail(mailOptions, function(error, info){
+                                    if (error) {
+                                        console.log(error);
+                                    } else {
+                                        console.log('Email sent: ' + info.response);
                                     }
+                                    });
+                                    
+                                    // finsih singup
+                                    var user = {
+                                        UserID: insertResult.insertId
+                                    };
+                                    return done(null, user);
                                 });
                             }
                         });
-                        
+                            
                     }
                 });
             }

@@ -64,28 +64,17 @@ router.route('/:username/edit')
                     });
                     
                 } else {
-                    var selectQuery = 'SELECT * FROM users WHERE Phone = \'' + form.phone + '\' AND  Username != \'' + req.user.Username + '\'';
-                    RunQuery(selectQuery, function (phoneRows) {
-                        if (phoneRows.length > 0) {
-                            res.render('profile/editProfile', {
-                                title: req.user.FullName,
-                                currentUrl: '/usr/',
-                                customer: req.user,
-                                signUpError: 'El celular ingresado ya ha sido registrado previamente en Iocus. Por favor ingresa otro celular.'
-                            });
-                            
-                        } else {
-                            var updateQuery = 'UPDATE Users\
-                                SET Fullname = \'' + form.fullName + '\', \
-                                    Email = \'' + form.email + '\', \
-                                    Phone = \'' + form.phone + '\' \
-                                WHERE UserID = ' + req.user.UserID;
+                    
+                    var updateQuery = 'UPDATE Users\
+                        SET Fullname = \'' + form.fullName + '\', \
+                            Email = \'' + form.email + '\', \
+                            Phone = \'' + form.phone + '\' \
+                        WHERE UserID = ' + req.user.UserID;
 
-                            RunQuery(updateQuery, function (result) {
-                                res.redirect('/usr/' + req.user.Username);
-                            });
-                        }
+                    RunQuery(updateQuery, function (result) {
+                        res.redirect('/usr/' + req.user.Username);
                     });
+                        
                 }
             });
 
