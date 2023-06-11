@@ -69,6 +69,15 @@ router.route('/order').get(function (req, res, next) {
 
         RunQuery(insertQuery, function (rows) {
             console.log(req.session.cart);
+
+            var codigosMail = "";
+
+                    var email = req.user.Email;
+                        var fullName = req.user.FullName;
+
+                        console.log(email);
+                        console.log(fullName);
+                        
             for (var item in req.session.cart) {
                 console.log(item);
                 if (req.session.cart[item].quantity > 0) {
@@ -80,7 +89,7 @@ router.route('/order').get(function (req, res, next) {
                         req.session.cart[item].productTotal + ');';
                     RunQuery(insertQueryOrders, function (result) {});
 
-                    var codigosMail = "";
+                    
 
                     for (let i = 0; i < req.session.cart[item].quantity; i++) {
                         var a = genRandonString(4);
@@ -102,38 +111,9 @@ router.route('/order').get(function (req, res, next) {
                     var idWhere = req.session.cart[item].ProductID
                     RunQuery(updateQueryQuantity, function(result2){
 
-                        var email = req.user.Email;
-                        var fullName = req.user.FullName;
+                        
 
-                        console.log(email);
-                        console.log(fullName);
-
-                        //send mail process
-                        var transporter = nodemailer.createTransport({
-                        service: 'hotmail',
-                        auth: {
-                            user: 'iocus_2023@outlook.com',
-                            pass: 'Magenta77'
-                        }
-                        });
-
-                        var mailOptions = {
-                        from: 'iocus_2023@outlook.com',
-                        to: email,
-                        subject: 'Iocus - Confirmación de compra',
-                        text: 'Hola '+ fullName+', gracias por tu compra. \n'+
-                        'A continuación se muestra el resumen de tu compra: \n'+
-                        "Total de compra: " + totalMail + '\n'+
-                        "Articulos comprados: \n"+ codigosMail
-                        };
-
-                        transporter.sendMail(mailOptions, function(error, info){
-                        if (error) {
-                            console.log(error);
-                        } else {
-                            console.log('Email sent: ' + info.response);
-                        }
-                        });
+                        
 
                         var selectQueryUnits = 'SELECT UnitsInStock FROM Products WHERE ProductID = ' + idWhere + ';';
                                
@@ -154,20 +134,42 @@ router.route('/order').get(function (req, res, next) {
                 }
             }
 
+            //send mail process
+            var transporter = nodemailer.createTransport({
+                service: 'hotmail',
+                auth: {
+                    user: 'iocus_2023@outlook.com',
+                    pass: 'Magenta77'
+                }
+                });
+
+                var mailOptions = {
+                from: 'iocus_2023@outlook.com',
+                to: email,
+                subject: 'Iocus - Confirmación de compra',
+                text: 'Hola '+ fullName+', gracias por tu compra. \n'+
+                'A continuación se muestra el resumen de tu compra: \n'+
+                "Total de compra: " + totalMail + '\n'+
+                "Articulos comprados: \n"+ codigosMail
+                };
+
+                transporter.sendMail(mailOptions, function(error, info){
+                if (error) {
+                    console.log(error);
+                } else {
+                    console.log('Email sent: ' + info.response);
+                }
+                });
+
+
             //view order
 
             //get order info
-            var selectQuery = '\
-            SELECT *\
-            FROM Orders\
-            WHERE OrderID = ' + rows.insertId;
-
+            var selectQuery = 'SELECT * FROM Orders WHERE OrderID = ' + rows.insertId;
             RunQuery(selectQuery, function (order) {
             
                 //get order info
-                selectQuery = '\
-                SELECT *\
-                FROM `Order Details`\
+                selectQuery = 'SELECT * FROM `Order Details`\
                 INNER JOIN (\
                     SELECT Products.*, Categories.CategorySlug\
                     FROM Products\

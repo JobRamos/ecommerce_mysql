@@ -40,6 +40,7 @@ block details
                         label Confirmar contraseña para guardar cambios
                     p(id="errorPassword" style="color: #d9534f; display: none;")
                     input(type='submit', value='Actualizar perfil')
+                br
                     
        
     script(src="https://cdn.jsdelivr.net/npm/sweetalert2@9")
@@ -92,7 +93,7 @@ block details
             var paragraph = document.getElementById("errorPassword");
             paragraph.style.display = "none";
             if(password == "" || password.length < 1 || password.length > 20){
-                paragraph.textContent = "*Por favor ingresa tu contraseña para confirmar esta operación";
+                paragraph.textContent = "*Por favor ingresa tu contraseña para confirmar esta operación (longitud de minimo 8 y máximo 20 caracteres)";
                 paragraph.style.display = "block"; 
                 aprobado = 0;
             }

@@ -44,6 +44,12 @@ block content
                             //-         i.fa.fa-shopping-cart
                             //-         |          Añadir al Carrito
 
+                            form(action='/cart/' + id + '/buy-directly', method='POST')
+                                input(type='number', name='quantity',id="xd4", value='1', min="1", max="1", style="display: none;")
+                                button.btn.btn-default(type='submit', style="width: 150px;" class="btn btn-primary")
+                                    i.fa.fa-arrow-right
+                                    |          Comprar ahora  
+
                             form(action='/wishlist/' + id + '/delete', method='POST')
                                 button.btn.btn-default(type='submit' class="btn btn-danger")
                                     i.fa.fa-trash-o

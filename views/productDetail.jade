@@ -43,7 +43,7 @@ block content
 
                                 - var availability = 'En Stock (' + product.UnitsInStock + ' unidades)'
                                 if product.UnitsInStock < 1
-                                    - availability = 'No disponible'
+                                    - availability = 'Agotado por el momento'
 
                                 p
                                     b Descripción:
@@ -60,23 +60,23 @@ block content
                                     b Año de lanzamiento:
                                     = ' ' + product.ManufactureYear
 
-                                if product.UnitsInStock > 0
-
-                                    span
-                                        span= ' MX$' + product.ProductPrice
-                                        form(action='/cart/' + product.ProductID + '/add', method='POST')
-                                            label Cantidad:
-                                                input(type='number', name='quantity',id="xd3", onchange="myFunction(this.value)",  value='1', min="1", max=product.UnitsInStock)
-                                            br
-                                            button.btn.btn-default.add-to-cart(type='submit', onclick="addToCart()")
-                                                i.fa.fa-shopping-cart
-                                                |          Añadir al carrito
-                                        form(action='/cart/' + product.ProductID + '/buy-directly', method='POST')
-                                            input(type='number', name='quantity',id="xd4", value='1', min="1", max=product.UnitsInStock, style="display: none;")
-                                            button.btn.btn-default.add-to-wishlist(type='submit', style="width: 150px;")
-                                                i.fa.fa-arrow-right
-                                                |          Comprar ahora    
-                                    br
+                                if product.UnitsInStock > 0 
+                                    if product.Feature > 0 
+                                        span
+                                            span= ' MX$' + product.ProductPrice
+                                            form(action='/cart/' + product.ProductID + '/add', method='POST')
+                                                label Cantidad:
+                                                    input(type='number', name='quantity',id="xd3", onchange="myFunction(this.value)",  value='1', min="1", max=product.UnitsInStock)
+                                                br
+                                                button.btn.btn-default.add-to-cart(type='submit', onclick="addToCart()")
+                                                    i.fa.fa-shopping-cart
+                                                    |          Añadir al carrito
+                                            form(action='/cart/' + product.ProductID + '/buy-directly', method='POST')
+                                                input(type='number', name='quantity',id="xd4", value='1', min="1", max=product.UnitsInStock, style="display: none;")
+                                                button.btn.btn-default.add-to-wishlist(type='submit', style="width: 150px;")
+                                                    i.fa.fa-arrow-right
+                                                    |          Comprar ahora    
+                                        br
 
                 
                                 

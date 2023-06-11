@@ -1442,7 +1442,7 @@ h2.title {
 
 .productCat img {
     
-    width: 100%;
+    width: 220px;
     object-fit: cover;
     border-radius: 12px;
 }

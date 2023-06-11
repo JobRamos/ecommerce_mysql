@@ -12,7 +12,7 @@ router.route('/')
             var sqlStr = 'SELECT * FROM wishlist\
             INNER JOIN products\
             ON wishlist.IDvideojuego = products.ProductID\
-            WHERE IDUsuario =  \'' + req.user.UserID + '\'';
+            WHERE IDUsuario =  \'' + req.user.UserID + '\' AND Feature = 1';
 
             RunQuery(sqlStr, function (wishlist) {
                             

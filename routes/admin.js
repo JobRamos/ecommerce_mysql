@@ -387,7 +387,7 @@ router.route('/customers')
             var contextDict = {
                 title: 'Admin - Usuarios',
                 currentUrl: '/usr/',
-                customer: req.user,
+                user: req.user,
                 customers: customers
             };
 

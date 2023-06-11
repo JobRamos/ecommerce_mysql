@@ -2,101 +2,76 @@ extends info
 
 block details
     .row
-        .col-sm-12
+        h1= "Orden "+ order.OrderID
 
             
-            .table-responsive.cart_info
-                
-
-                table.content-table
-                    thead
-                        tr
-                            td(style='max-width: 120px;').image Imagen
-                            td videojuego
-                            td Precio Unitario 
-                            td Cantidad
-                            td Total
-                    tbody
-
-                        each product in products
-                            -var quantity = product.Quantity;
-                            -var name = product.ProductName;
-                            -var productLink = '/cat/' + product.CategorySlug + '/' + product.ProductSlug + '/' + product.ProductID;
-                            -var unitPrice = product.ProductPrice;
-                            -var productTotal = product.Total;
-                            tr
-                                td.cart_product
-                                    a(href=productLink)
-                                        img(src=product.Image, alt=name, style='width: 120px; border: none;')
-                                td.cart_description
-                                    h4
-                                        a(href=productLink)= name
-                                    p= product.Description
-                                td
-                                    p(style='color: #85BB65;')= ' $' + unitPrice
-                                td.cart_quantity
-                                    p=quantity
-                                td
-                                    p(style='color: #85BB65; font-weight: 1000;').cart_total_price= ' $' + productTotal
-                        
-                        tr
-                            td(colspan='3')
-                            td(colspan='2')
-                                table.content-table
-                                    thead
-                                        tr.cart_menu
-                                            td(colspan=2) Resumen de compra
-
-                                    tbody
-                                        tr
-                                            td Sub Total
-                                            td(style='color: #85BB65;')= ' $' + order.SubTotal
-                                        tr
-                                            td Descuento
-                                            td(style='color: red;')= ' $' + order.Discount
-                                        tr
-                                            td Total
-                                            td(style='color: #85BB65;')
-                                                span= ' $' + order.Total
-
-                        tr
-                            td(colspan=6)
-                                button.add-to-cart(onclick="ocultarCodigos()", id="ocultar", style="display: none; float: right;") Ocultar codigos
-                                button.add-to-cart(onclick="mostrarCodigos()", id="mostrar", style='float: right;') Mostrar codigos
-
-                        tr
-                            td(colspan='3')
-                            td(colspan='2')
+        .table-responsive.cart_info
             
 
-                                table(id="tablaCodigos", style="display: none; width: 100%;").content-table
-                                    thead
-                                        tr
-                                            td(colspan=6, style='text-align: center;') Códigos
+            table.content-table
+                thead
+                    tr
+                        td(style='max-width: 120px;').image Imagen
+                        td videojuego
+                        td Precio Unitario 
+                        td Cantidad
+                        td Total
+                        td Códigos
+                tbody
 
-                                    tbody
-                                        each codigo in codigos
-                                            tr
-                                                td=codigo.ProductName
-                                                td(style='color: #85BB65;')=codigo.codigo
+                    each product in products
+                        -var quantity = product.Quantity;
+                        -var name = product.ProductName;
+                        -var productLink = '/cat/' + product.CategorySlug + '/' + product.ProductSlug + '/' + product.ProductID;
+                        -var unitPrice = product.ProductPrice;
+                        -var productTotal = product.Total;
+                        tr
+                            td.cart_product
+                                a(href=productLink)
+                                    img(src=product.Image, alt=name, style='width: 120px; border: none;')
+                            td.cart_description
+                                h4
+                                    a(href=productLink)= name
+                                p= product.Description
+                            td
+                                p(style='color: #85BB65;')= ' $' + unitPrice
+                            td.cart_quantity
+                                p=quantity
+                            td
+                                p(style='color: #85BB65; font-weight: 1000;').cart_total_price= ' $' + productTotal
 
+                            td(style='width: 150px;')
+                                each codigo in codigos
+                                    if codigo.ProductName == product.ProductName
+                                        p(style='color: #dc54a4;')= codigo.codigo
+                    
+            br     
+            table(style='min-width: 50%; float: right;').content-table
+                thead
+                    tr.cart_menu
+                        td(colspan=2) Resumen de compra
 
+                tbody
+                    tr
+                        td Sub Total
+                        td(style='color: #85BB65;')= ' $' + order.SubTotal
+                    tr
+                        td Descuento
+                        td(style='color: red;')= ' $' + order.Discount
+                    tr
+                        td Total
+                        td(style='color: #85BB65;')
+                            span= ' $' + order.Total
 
-            
-                br
-
-            
-  
-                br
-                br
-                br
-                br
-                br
-                br
-                br
-                br
-                br
-                br
+            br
+            br
+            br
+            br
+            br
+            br
+            br
+            br
+            br
 
     script(type='text/javascript').
 

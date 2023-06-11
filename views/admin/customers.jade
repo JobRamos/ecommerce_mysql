@@ -1,6 +1,7 @@
 extends admin
 
 block details
+
     .table-responsive
         table.content-table
             thead
@@ -42,7 +43,20 @@ block details
                                         i.fa.fa-lock
                                         = ' Revocar Admin'
                         td
-                            form.dev-form(action='/admin/customers/' + customer.UserID + '/delete', method='POST')
-                                button.cus-btn.btn.btn-default(type='submit', class="btn btn-danger")
-                                    i.fa.fa-trash-o
-                                    = ' Eliminar'
+                            if customer.UserID != user.UserID
+                                form.dev-form(action='/admin/customers/' + customer.UserID + '/delete', method='POST')
+                                    button.cus-btn.btn.btn-default(type='submit', class="btn btn-danger")
+                                        i.fa.fa-trash-o
+                                        = ' Eliminar'
+
+    script(src="https://cdn.jsdelivr.net/npm/sweetalert2@9")
+    script(type='text/javascript').
+
+        //- alert errores
+        var MessageError = document.getElementById("MessageError").textContent;
+        console.log(document.getElementById("MessageError").textContent); 
+        if (MessageError != ''){
+            Swal.fire({icon: 'warning',
+                        title: 'Datos invalidos',
+                        text: MessageError});
+        }                        

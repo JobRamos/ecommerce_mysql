@@ -78,7 +78,7 @@ module.exports = function (app, passport) {
                     from: 'iocus_2023@outlook.com',
                     to: req.body.email,
                     subject: 'Iocus - Reseteo de contraseña',
-                    text: 'Hola, la contrasena provicional que se te ha sido asignada es la siguiente: ' + provitionalPasswordUnecrypted + '. Por favor ingresa a Iocus con esta contrasena para poder generar una nueva contrasena.'
+                    text: 'Hola, la contraseña temporal que se te ha sido asignada es la siguiente: ' + provitionalPasswordUnecrypted + '. Por favor ingresa a Iocus con esta contrasena para poder generar una nueva contrasena.'
                     };
 
                     transporter.sendMail(mailOptions, function(error, info){
@@ -89,7 +89,7 @@ module.exports = function (app, passport) {
                     }
                     });
 
-                    var signInErrorReset = 'Se ha enviado una contrasena provicional al correo '+ req.body.email+'\
+                    var signInErrorReset = 'Se ha enviado una contraseña temporal al correo '+ req.body.email+'. \
                     Consulta tu email para recuperar tu acesso a Iocus';
 
                     

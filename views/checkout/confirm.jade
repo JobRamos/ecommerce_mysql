@@ -50,22 +50,23 @@ block content
                                 td
                                     p(style='color: #85BB65; font-weight: 1000;').cart_total_price= ' $' + productTotal
 
-                        tr
-                            td(colspan='3')
-                            td(colspan='2')
-                                table.content-table
-                                    thead
-                                        tr.cart_menu
-                                            td(colspan=2) Resumen de compra
+                
+                br
+                table(style='min-width: 50%; float: right;').content-table
+                    thead
+                        tr.cart_menu
+                            td(colspan=2) Resumen de compra
 
-                                    tbody
-                                        tr
-                                            td Sub Total
-                                            td(style='color: #85BB65;')= ' $' + order.SubTotal
-                                        tr
-                                            td Descuento
-                                            td(style='color: red;')= ' $' + order.Discount
-                                        tr
-                                            td Total
-                                            td(style='color: #85BB65;')
-                                                span= ' $' + order.Total
+                    tbody
+                        tr
+                            td Sub Total
+                            td(style='color: #85BB65;')= ' $' + order.SubTotal
+                        tr
+                            td Descuento
+                            td(style='color: red;')= ' $' + order.Discount
+                        tr
+                            td Total
+                            td(style='color: #85BB65;')
+                                span= ' $' + order.Total
+
+        br
