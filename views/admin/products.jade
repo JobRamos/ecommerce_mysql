@@ -5,7 +5,7 @@ block details
     form(action='/admin/products/add', method='GET')
         button.btn.btn-default(type='submit', class="btn btn-success")
             i.fa.fa-plus
-            = ' Añadir nuevo videojuego'
+            = ' Añadir nuevo Producto'
     br       
     .row
         .features_items
@@ -47,11 +47,11 @@ block details
                             if product.Feature == 0
                                 - feature = 'No'
                                 p(style="color: white; background-color: #d9534f;")
-                                    b Mostrar videojuego como disponible:
+                                    b Mostrar Producto como disponible:
                                     = ' ' + feature
                             else   
                                 p
-                                    b Mostrar videojuego como disponible:
+                                    b Mostrar Producto como disponible:
                                     = ' ' + feature
 
 

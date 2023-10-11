@@ -3,9 +3,22 @@ var router = express.Router();
 
 var slug = require('slug');
 
-// database module
+// sql database module
 var database = require('../config/database');
 var RunQuery = database.RunQuery;
+
+// mongo database module
+const mongoose = require("mongoose");
+const Product = mongoose.model('Product', new mongoose.Schema({
+    name: String,
+    category: Number,
+    price: Number,
+    unit: Number,
+    description: String,
+    year: Number,
+    image: String,
+    feature: Number
+}));
 
 function isAdmin(req, res, next) {
 
@@ -135,7 +148,7 @@ router.route('/products')
         RunQuery(sqlStr, function (products) {
 
             var contextDict = {
-                title: 'Admin - Videojuegos',
+                title: 'Admin - Productos',
                 currentUrl: '/usr/',
                 products: products,
                 customer: req.user
@@ -216,7 +229,7 @@ router.route('/products/add')
 
         RunQuery(sqlStr, function (categories) {
             var contextDict = {
-                title: 'Admin - Añadir videojuego',
+                title: 'Admin - Añadir Productos',
                 currentUrl: '/usr/',                
                 categories: categories,
                 customer: req.user
@@ -227,8 +240,7 @@ router.route('/products/add')
     })
 
     .post(isAdmin, function (req, res, next) {
-        var sqlStr = '\
-            INSERT INTO Products\
+        var sqlStr = 'INSERT INTO Products\
             VALUES (null, \'' + req.body.name + '\', '
                 + req.body.category + ', '
                 + req.body.price + ', '
@@ -237,13 +249,27 @@ router.route('/products/add')
                 + req.body.year + ', \
             \'' + req.body.image + '\', \
             \'' + slug(req.body.name) + '\', '
-                + req.body.feature + ')'
-        /*Image = name.png\*/
-            ;
+                + req.body.feature + ')';
 
             console.log(sqlStr);
+            var name = req.body.name;
+            var category = req.body.category;
+            var price = req.body.price;
+            var unit = req.body.unit;
+            var description = req.body.description;
+            var year = req.body.year;
+            var image = req.body.image;
+            var feature = req.body.feature;
 
-        RunQuery(sqlStr, function (category) {
+        RunQuery(sqlStr, async function (categorySQL) {
+
+            // add to mongo
+            const product = new Product({name: name, category: category, price: price, unit: unit, description: description, year: year, image: image, feature: feature});
+            await product.save();
+            console.log("success_msg", "Product Added Successfully to Mongo");
+            
+            
+
             res.redirect('/admin/products');
         });
     });

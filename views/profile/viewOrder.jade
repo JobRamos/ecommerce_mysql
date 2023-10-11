@@ -12,11 +12,10 @@ block details
                 thead
                     tr
                         td(style='max-width: 120px;').image Imagen
-                        td videojuego
+                        td Producto
                         td Precio Unitario 
                         td Cantidad
                         td Total
-                        td Códigos
                 tbody
 
                     each product in products
@@ -40,10 +39,6 @@ block details
                             td
                                 p(style='color: #85BB65; font-weight: 1000;').cart_total_price= ' $' + productTotal
 
-                            td(style='width: 150px;')
-                                each codigo in codigos
-                                    if codigo.ProductName == product.ProductName
-                                        p(style='color: #dc54a4;')= codigo.codigo
                     
             br     
             table(style='min-width: 50%; float: right;').content-table

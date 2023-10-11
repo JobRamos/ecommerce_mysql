@@ -12,6 +12,8 @@ router.all('/', function (req, res, next) {
         FROM Categories';
 
     RunQuery(sqlStr, function (categories) {
+
+        console.log(categories);
         sqlStr = '\
             SELECT Products.*, Categories.CategoryName, Categories.CategorySlug\
             FROM Products\
@@ -20,6 +22,7 @@ router.all('/', function (req, res, next) {
             WHERE Feature = 1 AND UnitsInStock > 0';
 
         RunQuery(sqlStr, function (products) {
+            console.log(products);
             var contextDict = {
                 currentUrl: '/',
                 title: 'Inicio',
@@ -77,7 +80,7 @@ router.route('/cat/:catSlug')
 
                     var contextDict = {
                         currentUrl: '/cat/all',
-                        title: 'Todos los videojuegos',
+                        title: 'Todos los Productos',
                         products: products,
                         categories: categories,
                         customer: req.user

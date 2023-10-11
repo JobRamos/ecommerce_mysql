@@ -60,7 +60,7 @@ router.route('/:username/edit')
                         title: req.user.FullName,
                         currentUrl: '/usr/',
                         customer: req.user,
-                        signUpError: 'El email ingresado ya ha sido registrado previamente en Iocus. Por favor ingresa otro email.'
+                        signUpError: 'El email ingresado ya ha sido registrado previamente. Por favor ingresa otro email.'
                     });
                     
                 } else {

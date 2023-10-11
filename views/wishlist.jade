@@ -9,16 +9,16 @@ block content
       thead
         tr
             td Imagen
-            td Videojuego        
+            td Producto        
             td Precio
             td Acciones
       tbody
             if (wishlist < 1)
                 tr
                     td(colspan="4", style="text-align: center;")
-                        p= "No se encontraron videojuegos en la Lista de Deseos"
+                        p= "No se encontraron Productos en la Lista de Deseos"
                         a(class={active: currentUrl === '/'}, href='/')
-                                            | Explorar videojuegos
+                                            | Explorar Productos
             else
                 each product in wishlist
                     -var quantity = product.quantity;

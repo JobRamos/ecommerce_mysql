@@ -24,7 +24,7 @@ module.exports = function (app, passport) {
     app.get('/reset-password', function (req, res) {
         // render the page and pass in any flash data if it exists
         if (req.session.inCheckOut){
-            var checkOutNoti = 'Necesitas ingresar a Iocus paara poder realizar esta operación!\
+            var checkOutNoti = 'Necesitas ingresar a Ecommerce para poder realizar esta operación!\
                 Registrate si aun no tienes una cuenta!';
             req.session.inCheckOut = false;
         }
@@ -46,7 +46,7 @@ module.exports = function (app, passport) {
             console.log(mail[0].MailCount);
 
             if(mail[0].MailCount == 0){
-                var checkOutNoti = 'El email ingresado no ha sido registrado en Iocus!\
+                var checkOutNoti = 'El email ingresado no ha sido registrado!\
                 Registrate si aun no tienes una cuenta!';
                 var contextDict = {
                     title: 'Resetear Contraseña',
@@ -65,32 +65,9 @@ module.exports = function (app, passport) {
                 RunQuery(sqlStr, function (resetPassword) {
 
 
-                    //send mail process
-                    var transporter = nodemailer.createTransport({
-                    service: 'hotmail',
-                    auth: {
-                        user: 'iocus_2023@outlook.com',
-                        pass: 'Magenta77'
-                    }
-                    });
-
-                    var mailOptions = {
-                    from: 'iocus_2023@outlook.com',
-                    to: req.body.email,
-                    subject: 'Iocus - Reseteo de contraseña',
-                    text: 'Hola, la contraseña temporal que se te ha sido asignada es la siguiente: ' + provitionalPasswordUnecrypted + '. Por favor ingresa a Iocus con esta contrasena para poder generar una nueva contrasena.'
-                    };
-
-                    transporter.sendMail(mailOptions, function(error, info){
-                    if (error) {
-                        console.log(error);
-                    } else {
-                        console.log('Email sent: ' + info.response);
-                    }
-                    });
 
                     var signInErrorReset = 'Se ha enviado una contraseña temporal al correo '+ req.body.email+'. \
-                    Consulta tu email para recuperar tu acesso a Iocus';
+                    Consulta tu email para recuperar tu acesso a Ecommerce';
 
                     
                     var contextDict = {
@@ -111,7 +88,7 @@ module.exports = function (app, passport) {
     app.get('/sign-in', function (req, res) {
         // render the page and pass in any flash data if it exists
         if (req.session.inCheckOut){
-            var checkOutNoti = 'Necesitas ingresar a Iocus para poder realizar esta operación\
+            var checkOutNoti = 'Necesitas ingresar a Ecommerce para poder realizar esta operación\
                 Registrate si aun no tienes una cuenta!';
             req.session.inCheckOut = false;
         }
@@ -133,11 +110,11 @@ module.exports = function (app, passport) {
     app.get('/sign-up', function (req, res) {
         // render the page and pass in any flash data if it exists
         if (req.session.inCheckOut){
-            var checkOutNoti = 'Necesitas ingresar a Iocus para poder realizar esta operación';
+            var checkOutNoti = 'Necesitas ingresar a Ecommerce para poder realizar esta operación';
             req.session.inCheckOut = false;
         }
         var contextDict = {
-            title: 'Regístrate en Iocus',
+            title: 'Regístrate en Ecommerce',
             signUpError: req.flash('signUpError'),
             checkOutNoti: checkOutNoti
         };

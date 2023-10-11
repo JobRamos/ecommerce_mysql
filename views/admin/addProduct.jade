@@ -3,12 +3,12 @@ extends admin
 block details
 
     .center-login
-        h1 Añadir nuevo videojuego
+        h1 Añadir nuevo Producto
         form(id='addProduct', action='/admin/products/add', method='POST')
             .txt_field
                 input(type='text', id='name', name='name', required=true)
                 span
-                label Nombre del Videojuego 
+                label Nombre del Producto 
             .radio_field
                 span
                 label Categoría
@@ -18,7 +18,7 @@ block details
             .txt_field
                 input(type='text', id='price', name='price', required=true)
                 span
-                label Precio del Videojuego 
+                label Precio del Producto 
             .txt_field
                 input(type='text', id='unit', name='unit', required=true)
                 span
@@ -26,18 +26,18 @@ block details
             .txt_field
                 input(type='text', id='description', name='description', required=true)
                 span
-                label Descripción del Videojuego 
+                label Descripción del Producto 
             .txt_field
                 input(type='text', id='year', name='year', required=true)
                 span
-                label Año de lanzamiento del Videojuego 
+                label Año de lanzamiento del Producto 
             .txt_field
                 input(type='text', id='image', name='image', required=true)
                 span
                 label Imagen de la categoría
             .radio_field
                 span
-                label Mostrar videojuego como disponible
+                label Mostrar Producto como disponible
                 
                 input(type='radio', id='featureYes', name='feature', value=1)
                 label(for='featureYes') Si
@@ -47,7 +47,7 @@ block details
                 label(for='featureNo') No
 
                 br
-            input(type='submit', value='Añadir videojuego')
+            input(type='submit', value='Añadir Producto')
             br
             br
     br

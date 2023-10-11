@@ -4,16 +4,16 @@ html
         //metadata
         meta(charset='utf-8')
         meta(name='viewport', content='width=device-width, initial-scale=1.0')
-        meta(name='description', content='Iocus')
-        meta(name='author', content='Iocus. Todos los Derechos Reservados')
+        meta(name='description', content='Ecommerce')
+        meta(name='author', content='Ecommerce. Todos los Derechos Reservados')
         //title
-        title=  'Iocus | ' + title
+        title=  'Ecommerce | ' + title
         //stylesheet
         link(rel='stylesheet', href='/css/bootstrap.min.css')
         link(rel='stylesheet', href='/css/font-awesome.min.css')
         link(rel='stylesheet', href='/css/main.css')
         //favicon
-        link(rel='shortcut icon', href='/img/iocus-5.png')
+        link(rel='shortcut icon', href='/img/ecommerce.png')
         link(rel='apple-touch-icon-precomposed', sizes='144x144', href='/img/ico/apple-touch-icon-144-precomposed.png')
         link(rel='apple-touch-icon-precomposed', sizes='114x114', href='/img/ico/apple-touch-icon-114-precomposed.png')
         link(rel='apple-touch-icon-precomposed', sizes='72x72', href='/img/ico/apple-touch-icon-72-precomposed.png')
@@ -22,49 +22,10 @@ html
         //header
         header#header
                
-            //header_top
-            //- .header_top
-            //-     .container
-            //-         .row
-            //-             .col-sm-6
-            //-                 a(href='/')
-            //-                         img(src='/img/iocus-5.png', alt='Iocus Logo')
-                                
-            //-             .col-sm-6
-            //-                 .shop-menu.pull-right
-            //-                     ul.nav.navbar-nav
-            //-                         li
-            //-                             a(href='/wishlist')
-            //-                                 i.fa.fa-heart
-            //-                                 |  Lista de Deseos
-            //-                         -var orderCus = 'Iniciar Sesión'
-            //-                         -var link = '/sign-in'
-            //-                         if customer
-            //-                             -orderCus=customer.FullName
-            //-                             -link='/usr/'
-            //-                         li
-            //-                             a(href=link)
-            //-                                 i.fa.fa-user
-            //-                                 =orderCus
-            //-                         li
-            //-                             a(href='/cart')
-            //-                                 i.fa.fa-shopping-cart
-            //-                                 |  Carrito
-            //-                         //li
-            //-                         //    a(href='/checkout')
-            //-                         //        i.fa.fa-money
-            //-                         //        |  Checkout
-            //-                         if customer
-            //-                             li
-            //-                                 a(href='/sign-out')
-            //-                                     i.fa.fa-sign-out
-            //-                                     |  Logout
-            ///header_top
-
-
+        
             .headerxd
                 a(href='/')
-                    img(src='/img/iocus-8.png', alt='Iocus Logo')
+                    img(src='/img/ecommerce4.png', alt='Ecommerce Logo')
 
                 a 
 
@@ -81,15 +42,15 @@ html
                         i.fa.fa-home
                         |      Inicio
                     a(class={active: currentUrl === '/cat/all'}, href='/cat/all') 
-                        i.fa.fa-gamepad
-                        |      Videojuegos
-                    if (customer && customer.Admin != 1) || !customer
-                        a(class={active: currentUrl === '/cart'}, href='/cart')
-                            i.fa.fa-shopping-cart
-                            |       Carrito
-                        a(class={active: currentUrl === '/wishlist'}, href='/wishlist')
-                            i.fa.fa-heart
-                            |       Lista de Deseos
+                        i.fa.fa-mobile
+                        |      Productos
+                    //- if (customer && customer.Admin != 1) || !customer
+                    a(class={active: currentUrl === '/cart'}, href='/cart')
+                        i.fa.fa-shopping-cart
+                        |       Carrito
+                    a(class={active: currentUrl === '/wishlist'}, href='/wishlist')
+                        i.fa.fa-heart
+                        |       Lista de Deseos
                     -var orderCus = '             Iniciar Sesión'
                     -var link = '/sign-in'
                     if customer
@@ -114,15 +75,6 @@ html
         block content
 
 
-        #chatContainer
-            #messageContainer
-            form#myForm
-                input#textInput(type='text', name='textInput')
-                button.add-to-cart(type='submit') 
-                          i.fa.fa-arrow-right
-        #chatToggle 
-            i.fa.fa-comment
-
         //Footer
         footer#footer
             //.footer-top
@@ -144,35 +96,7 @@ html
             //                .single-promo.promo4
             //                    i.fa.fa-gift
             //                    p Surprising Gift
-            .footer-widget
-                .container
-                    .row
-                        .col-sm-2
-                            .companyinfo
-                                h2
-                                    a(href='/')
-                                        img(src='/img/iocus-5.png', alt='Iocus Logo', style="width: 35px;")
-                                    span   I
-                                    | ocus 
-                                p
-                                    | Iocus es la tienda online 
-                                    | comprometida a convertirse en el portal
-                                    | de videojuegos mas usado en el mundo.
-                        .col-sm-8.col-sm-offset-1
-                            .single-widget
-                                h2 ¿Quieres recibir notificaciones sobre lo nuevo en Iocus?
-                                form.searchform(action='/subscribe', method='POST')
-                                    input(type='text', name='email', placeholder='Email')
-                                    button.btn.btn-default(type='submit')
-                                        i.fa.fa-arrow-circle-o-right
-                                    p
-                                        | Obtenga las actualizaciones más recientes, ofertas exclusivas que 
-                                        | no encontrará en ningún otro lugar directamente en 
-                                        | su bandeja de entrada y actualícese usted mismo.
-            .footer-bottom
-                .container
-                    .row
-                        p.pull-left &copy 2023 Iocus Website. Todos los Derechos Reservados.
+            
         ///Footer
     script(src='https://js.stripe.com/v3/')
     script(src='/js/jquery-2.1.4.min.js')
@@ -186,7 +110,7 @@ html
         const chatContainer = document.getElementById('chatContainer');
         const chatToggle = document.getElementById('chatToggle');
 
-        const bienvenida = "¡Hola! soy el asistente virtual de Iocus y estoy aquí para apoyarte en tu recorrido dentro"
+        const bienvenida = "¡Hola! soy el asistente virtual de Ecommerce y estoy aquí para apoyarte en tu recorrido dentro"
         + " de nuestra página, puedes preguntarme cualquier cosa relacionada con la página y con gusto te responderé con "
         + "la información existente";
 

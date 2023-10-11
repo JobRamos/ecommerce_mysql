@@ -3,12 +3,12 @@ extends admin
 block details
 
     .center-login
-        h1 Editar videojuego
+        h1 Editar Producto
         form(id='editProduct', action='/admin/products/' + product.ProductID + '/edit', method='POST')
             .txt_field
                 input(type='text', id='name', name='name', value=product.ProductName, required=true)
                 span
-                label Nombre del Videojuego 
+                label Nombre del Producto 
             .radio_field
                 span
                 label Categoría
@@ -21,7 +21,7 @@ block details
             .txt_field
                 input(type='text', id='price', name='price', value=product.ProductPrice, required=true)
                 span
-                label Precio del Videojuego 
+                label Precio del Producto 
             .txt_field
                 input(type='text', id='unit', name='unit', value=product.UnitsInStock, required=true)
                 span
@@ -29,11 +29,11 @@ block details
             .txt_field
                 input(type='text', id='description', name='description', value=product.Description, required=true)
                 span
-                label Descripción del Videojuego 
+                label Descripción del Producto 
             .txt_field
                 input(type='text', id='year', name='year', value=product.ManufactureYear, required=true)
                 span
-                label Año de lanzamiento del Videojuego 
+                label Año de lanzamiento del Producto 
             .txt_field
                 input(type='text', id='image', name='image', value=product.Image)
                 span
@@ -42,7 +42,7 @@ block details
                     img.dev-img(src=product.Image, alt=product.ProductName, width='200px')
             .radio_field
                 span
-                label Mostrar videojuego como disponible
+                label Mostrar Producto como disponible
                 
                 - var feature = true
                 if product.Feature == false
@@ -63,7 +63,7 @@ block details
                 br
 
                 br
-            input(type='submit', value='Actualizar videojuego')
+            input(type='submit', value='Actualizar Producto')
             br
             br
     br

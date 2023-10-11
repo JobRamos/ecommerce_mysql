@@ -59,7 +59,7 @@ module.exports = function (passport) {
             RunQuery(sqlStr, function (rows) {
                 // if no user is found, return the message
                 if (rows.length < 1)
-                    return done(null, false, req.flash('signInError', 'El usuario ingresado no pudo ser encontrado en Iocus. Por favor ingresa un usuario válido.')); // req.flash is the way to set flashdata using connect-flash
+                    return done(null, false, req.flash('signInError', 'El usuario ingresado no pudo ser encontrado en Ecommerce. Por favor ingresa un usuario válido.')); // req.flash is the way to set flashdata using connect-flash
 
                 // if the user is found but the password is wrong
                 if (!bcrypt.compareSync(password, rows[0].Password))
@@ -90,24 +90,13 @@ module.exports = function (passport) {
             }
             else {
 
-                const {valid, reason, validators} = await isEmailValid(email);
-                
-                console.log(valid);
-                console.log(reason);
-                console.log(validators);
-                if (valid == true){
-                    console.log("valid mail OK");
-                }else{
-                    console.log("not valid mail NOT");   
-                }
-
                 
 
                 var selectQuery = 'SELECT * FROM users\
                     WHERE email = \'' + email + '\'';
                 RunQuery(selectQuery, function (emailRows) {
                     if (emailRows.length > 0) {
-                        return done(null, false, req.flash('signUpError', 'El email ingresado ya ha sido registrado previamente en Iocus. Por favor ingresa otro email.'));
+                        return done(null, false, req.flash('signUpError', 'El email ingresado ya ha sido registrado previamente en Ecommerce. Por favor ingresa otro email.'));
                     }
                     else {
 
@@ -115,7 +104,7 @@ module.exports = function (passport) {
                         WHERE username = \'' + username + '\'';
                         RunQuery(selectQuery, function (usernameRows) {
                             if (usernameRows.length > 0) {
-                                return done(null, false, req.flash('signUpError', 'El usuario ingresado ya ha sido registrado previamente en Iocus. Por favor ingresa otro nombre de usuario.'));
+                                return done(null, false, req.flash('signUpError', 'El usuario ingresado ya ha sido registrado previamente en Ecommerce. Por favor ingresa otro nombre de usuario.'));
                             }
                             else {
                                 // if there is no user with that user and email
@@ -132,29 +121,7 @@ module.exports = function (passport) {
 
                                 RunQuery(insertQuery, function (insertResult) {
                                     
-                                    //send mail process
-                                    var transporter = nodemailer.createTransport({
-                                    service: 'hotmail',
-                                    auth: {
-                                        user: 'iocus_2023@outlook.com',
-                                        pass: 'Magenta77'
-                                    }
-                                    });
-
-                                    var mailOptions = {
-                                    from: 'iocus_2023@outlook.com',
-                                    to: email,
-                                    subject: 'Bienvenido a Iocus',
-                                    text: 'Hola '+ fullName+', gracias por registrate en Iocus'
-                                    };
-
-                                    transporter.sendMail(mailOptions, function(error, info){
-                                    if (error) {
-                                        console.log(error);
-                                    } else {
-                                        console.log('Email sent: ' + info.response);
-                                    }
-                                    });
+                                    
                                     
                                     // finsih singup
                                     var user = {

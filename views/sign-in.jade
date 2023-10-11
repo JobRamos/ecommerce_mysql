@@ -13,6 +13,10 @@ block content
                 p(id="MessageError2", value=signInError, style="display: none;")=signInError
                 p(id="MessageError3", value=signInErrorReset, style="display: none;")=signInErrorReset
             
+            br
+            br
+            br
+            br
             .center-login
                 h1 Iniciar Sesión
                 form(id='sign-in', action='/sign-in', method='POST', onsubmit = "return(validatexd());")
@@ -31,9 +35,13 @@ block content
                     input(type='submit', value='Iniciar Sesión')
                     .signup_link
                         | ¿Aún no tienes cuenta? 
-                        a(href='/sign-up') Regístrate en Iocus
+                        a(href='/sign-up') Regístrate en Ecommerce
                 br
                 br
+            br
+            br
+        br
+        br
     
     script(src="https://cdn.jsdelivr.net/npm/sweetalert2@9")
     script(type='text/javascript').
@@ -72,8 +80,8 @@ block content
         if (MessageError != ''){
             Swal.fire({icon: 'warning',
                         title: 'Operación invalida',
-                        confirmButtonColor: '#7a54d7',
-                        text: 'Necesitas ingresar a Iocus para poder realizar esta operación',
+                        confirmButtonColor: '#005A9C',
+                        text: 'Necesitas ingresar a Ecommerce para poder realizar esta operación',
                         footer: '<a href="/sign-up">Regístrate aquí si aún no tienes una cuenta</a>'});
         }
 
@@ -81,7 +89,7 @@ block content
         if (MessageError2 != ''){
             Swal.fire({icon: 'warning',
                         title: 'Datos invalidos',
-                        confirmButtonColor: '#7a54d7',
+                        confirmButtonColor: '#005A9C',
                         text: MessageError2});
         }
 
@@ -89,7 +97,7 @@ block content
         if (MessageError3 != ''){
             Swal.fire({icon: 'success',
                         title: 'Email enviado',
-                        confirmButtonColor: '#7a54d7',
+                        confirmButtonColor: '#005A9C',
                         text: MessageError3});
         }
 
