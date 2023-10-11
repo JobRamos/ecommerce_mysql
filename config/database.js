@@ -36,27 +36,3 @@ module.exports = {
     RunQuery: RunQuery
 };
 
-
-
-// mongo connection
-const mongoose = require("mongoose");
-const MONGODB_URI = "mongodb://rwuser:Harveylinux77%2B@122.8.183.160:8635/?authSource=admin&readPreference=primary&ssl=false&directConnection=true";
-
-connectToMongo();
-
-async function connectToMongo() {
-    try {
-    const db = await mongoose.connect(MONGODB_URI);
-    console.log("Connected to mongo", db.connection.name);
-    } catch (error) {
-    console.error(error);
-    }
-}
-
-mongoose.connection.on("connected", () => {
-  console.log("Mongoose is connected");
-});
-
-mongoose.connection.on("disconnected", () => {
-  console.log("Mongoose is disconnected");
-});

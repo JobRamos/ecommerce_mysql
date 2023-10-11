@@ -7,19 +7,6 @@ var slug = require('slug');
 var database = require('../config/database');
 var RunQuery = database.RunQuery;
 
-// mongo database module
-const mongoose = require("mongoose");
-const Product = mongoose.model('Product', new mongoose.Schema({
-    name: String,
-    category: Number,
-    price: Number,
-    unit: Number,
-    description: String,
-    year: Number,
-    image: String,
-    feature: Number
-}));
-
 function isAdmin(req, res, next) {
 
     if (req.isAuthenticated()) {
@@ -262,13 +249,6 @@ router.route('/products/add')
             var feature = req.body.feature;
 
         RunQuery(sqlStr, async function (categorySQL) {
-
-            // add to mongo
-            const product = new Product({name: name, category: category, price: price, unit: unit, description: description, year: year, image: image, feature: feature});
-            await product.save();
-            console.log("success_msg", "Product Added Successfully to Mongo");
-            
-            
 
             res.redirect('/admin/products');
         });
