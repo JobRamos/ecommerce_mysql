@@ -4,7 +4,7 @@ var config = {
     // host: 'localhost',
     host: '110.238.80.161',
     user: 'root',
-    password: 'Harveylinux77+',
+    password: 'Huawei123+',
     database: 'db_demo'
 };
 
