@@ -78,34 +78,6 @@ INSERT INTO `messages` VALUES (1,'hnj','jobdavid107@gmail.com','byuhnij','uhnjim
 /*!40000 ALTER TABLE `messages` ENABLE KEYS */;
 UNLOCK TABLES;
 
---
--- Table structure for table `order details`
---
-
-DROP TABLE IF EXISTS `order details`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `order details` (
-  `OrderID` int NOT NULL,
-  `ProductID` int NOT NULL,
-  `Quantity` smallint NOT NULL DEFAULT '1',
-  `Total` decimal(10,2) NOT NULL,
-  PRIMARY KEY (`OrderID`,`ProductID`),
-  KEY `FK_Order_Details_Products` (`ProductID`),
-  CONSTRAINT `FK_Order_Details_Orders` FOREIGN KEY (`OrderID`) REFERENCES `orders` (`OrderID`) ON DELETE CASCADE,
-  CONSTRAINT `FK_Order_Details_Products` FOREIGN KEY (`ProductID`) REFERENCES `products` (`ProductID`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `order details`
---
-
-LOCK TABLES `order details` WRITE;
-/*!40000 ALTER TABLE `order details` DISABLE KEYS */;
-INSERT INTO `order details` VALUES (127,73,1,16279.00),(128,67,1,2499.00),(129,66,1,19999.00),(129,70,1,5199.00),(130,69,1,1414.00),(131,70,1,5199.00),(131,71,1,2299.00),(132,74,1,15999.00);
-/*!40000 ALTER TABLE `order details` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `orders`
@@ -137,6 +109,36 @@ LOCK TABLES `orders` WRITE;
 INSERT INTO `orders` VALUES (116,42,3019.00,0.00,3019.00,'2023-06-11 13:08:37','Order Received'),(117,42,4700.00,0.00,4700.00,'2023-06-11 13:26:44','Order Received'),(118,42,2199.00,0.00,2199.00,'2023-06-11 13:34:45','Order Received'),(120,42,6000.00,0.00,6000.00,'2023-06-11 13:47:24','Order Received'),(121,42,1640.00,0.00,1640.00,'2023-06-11 13:53:33','Order Received'),(122,42,1200.00,0.00,1200.00,'2023-06-11 13:54:25','Order Received'),(123,42,999.00,0.00,999.00,'2023-06-11 14:13:25','Order Received'),(124,42,5799.00,0.00,5799.00,'2023-06-11 14:14:53','Order Received'),(125,42,1200.00,0.00,1200.00,'2023-06-11 19:40:18','Order Received'),(126,42,3000.00,0.00,3000.00,'2023-06-11 19:42:52','Order Received'),(127,1,16279.00,0.00,16279.00,'2023-06-11 22:09:29','Order Received'),(128,1,2499.00,0.00,2499.00,'2023-06-11 22:11:17','Order Received'),(129,1,25198.00,0.00,25198.00,'2023-06-11 22:12:06','Order Received'),(130,42,1414.00,0.00,1414.00,'2023-06-19 18:16:54','Order Received'),(131,42,7498.00,0.00,7498.00,'2023-06-19 18:17:31','Order Received'),(132,42,15999.00,0.00,15999.00,'2023-06-19 18:25:19','Order Received');
 /*!40000 ALTER TABLE `orders` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `order details`
+--
+
+DROP TABLE IF EXISTS `order details`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `order details` (
+  `OrderID` int NOT NULL,
+  `ProductID` int NOT NULL,
+  `Quantity` smallint NOT NULL DEFAULT '1',
+  `Total` decimal(10,2) NOT NULL,
+  PRIMARY KEY (`OrderID`,`ProductID`),
+  KEY `FK_Order_Details_Products` (`ProductID`),
+  CONSTRAINT `FK_Order_Details_Orders` FOREIGN KEY (`OrderID`) REFERENCES `orders` (`OrderID`) ON DELETE CASCADE,
+  CONSTRAINT `FK_Order_Details_Products` FOREIGN KEY (`ProductID`) REFERENCES `products` (`ProductID`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `order details`
+--
+
+LOCK TABLES `order details` WRITE;
+/*!40000 ALTER TABLE `order details` DISABLE KEYS */;
+INSERT INTO `order details` VALUES (127,73,1,16279.00),(128,67,1,2499.00),(129,66,1,19999.00),(129,70,1,5199.00),(130,69,1,1414.00),(131,70,1,5199.00),(131,71,1,2299.00),(132,74,1,15999.00);
+/*!40000 ALTER TABLE `order details` ENABLE KEYS */;
+UNLOCK TABLES;
+
 
 --
 -- Table structure for table `products`
