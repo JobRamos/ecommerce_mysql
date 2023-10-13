@@ -1,6 +1,41 @@
 CREATE DATABASE  IF NOT EXISTS `db_demo` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `db_demo`;
 
+--
+-- Table structure for table `users`
+--
+
+DROP TABLE IF EXISTS `users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `users` (
+  `UserID` int NOT NULL AUTO_INCREMENT,
+  `FullName` varchar(50) NOT NULL,
+  `Phone` varchar(12) NOT NULL,
+  `Email` varchar(50) NOT NULL,
+  `Username` varchar(28) DEFAULT NULL,
+  `Password` varchar(158) DEFAULT NULL,
+  `Admin` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`UserID`),
+  KEY `Username` (`Username`)
+) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `users`
+--
+
+LOCK TABLES `users` WRITE;
+/*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES (1,'Admin','0123456789','admin@astore.com','admin','$2a$10$mpJCYlSr762SwQVzdLwxR.KgRuWEHA2NzUanxxG/nxEStDRcRBbB6',1),(28,'Leo Llera','5582337118','leollera04@gmail.com','llera1234','$2a$10$2YMwnV4XJv6w0jOvvjQVEuMxLeuhmnosE/HqIKBVlAwwAVxKJRSte',0),(42,'job ramos','5582773616','jobdavid107@gmail.com','jobdavid107','$2a$10$6vW3MMssMiOLWNIcAIkb0OhU8059Kpm4MIN5D3BcV6yfhAZCOkHMq',0);
+/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `wishlist`
+--
+
+
 DROP TABLE IF EXISTS `categories`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
@@ -197,39 +232,7 @@ INSERT INTO `subscribers` VALUES ('javier_xmd@hotmail.com'),('avgagh@mail.com');
 /*!40000 ALTER TABLE `subscribers` ENABLE KEYS */;
 UNLOCK TABLES;
 
---
--- Table structure for table `users`
---
 
-DROP TABLE IF EXISTS `users`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `users` (
-  `UserID` int NOT NULL AUTO_INCREMENT,
-  `FullName` varchar(50) NOT NULL,
-  `Phone` varchar(12) NOT NULL,
-  `Email` varchar(50) NOT NULL,
-  `Username` varchar(28) DEFAULT NULL,
-  `Password` varchar(158) DEFAULT NULL,
-  `Admin` tinyint(1) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`UserID`),
-  KEY `Username` (`Username`)
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `users`
---
-
-LOCK TABLES `users` WRITE;
-/*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'Admin','0123456789','admin@astore.com','admin','$2a$10$mpJCYlSr762SwQVzdLwxR.KgRuWEHA2NzUanxxG/nxEStDRcRBbB6',1),(28,'Leo Llera','5582337118','leollera04@gmail.com','llera1234','$2a$10$2YMwnV4XJv6w0jOvvjQVEuMxLeuhmnosE/HqIKBVlAwwAVxKJRSte',0),(42,'job ramos','5582773616','jobdavid107@gmail.com','jobdavid107','$2a$10$6vW3MMssMiOLWNIcAIkb0OhU8059Kpm4MIN5D3BcV6yfhAZCOkHMq',0);
-/*!40000 ALTER TABLE `users` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `wishlist`
---
 
 DROP TABLE IF EXISTS `wishlist`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
