@@ -157,7 +157,7 @@ router.route('/:username/orders/:id')
 
         RunQuery(selectQuery, function (order) {
             //get delivery info
-            selectQueryCodigos = 'SELECT codigos.*, products.ProductName FROM astore.codigos\
+            selectQueryCodigos = 'SELECT codigos.*, products.ProductName FROM db_demo.codigos\
             INNER JOIN products\
             ON codigos.juego = products.ProductID WHERE orden = \'' + req.params.id + '\' ORDER BY ProductName ASC';
             console.log(selectQueryCodigos);

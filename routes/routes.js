@@ -154,7 +154,7 @@ router.route('/cat/:catSlug/:prodSlug/:prodID')
             user = req.user.UserID;
         }
 
-        var sqlStr1 = 'SELECT COUNT(*) as WhislistCount FROM astore.wishlist\
+        var sqlStr1 = 'SELECT COUNT(*) as WhislistCount FROM db_demo.wishlist\
             WHERE IDUsuario = \'' + user + '\' AND IDvideojuego = \'' + req.params.prodID + '\'';
 
         RunQuery(sqlStr1, function (WhislistCount) {
