@@ -1,7 +1,7 @@
 // sql connection
 var mysql = require('mysql');
 var config = {
-    host: '10.10.1.158',
+    host: '110.238.80.161',
     // host: 'Put your RDS IP here',
     user: 'root',
     password: 'Huawei123+',
